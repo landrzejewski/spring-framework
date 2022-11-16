@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Mapper(componentModel = "spring")
-public interface FastMoneyMapper {
+public interface MoneyMapper {
 
     default String toText(Money money) {
         return map(money, Money::toString);
