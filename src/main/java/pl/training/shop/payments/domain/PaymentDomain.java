@@ -2,7 +2,7 @@ package pl.training.shop.payments.domain;
 
 import lombok.Builder;
 import lombok.Value;
-import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.Money;
 
 import java.time.Instant;
 
@@ -11,7 +11,7 @@ import java.time.Instant;
 public class PaymentDomain {
 
     String id;
-    FastMoney value;
+    Money value;
     Instant timestamp;
     PaymentStatusDomain status;
 

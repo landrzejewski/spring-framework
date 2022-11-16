@@ -2,7 +2,7 @@ package pl.training.shop.payments.domain;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.Money;
 import pl.training.shop.commons.data.Page;
 import pl.training.shop.commons.data.ResultPage;
 import pl.training.shop.commons.aop.Atomic;
@@ -28,7 +28,7 @@ public class PaymentProcessor implements PaymentService {
         return paymentsRepository.save(payment);
     }
 
-    private PaymentDomain createPayment(FastMoney paymentValue) {
+    private PaymentDomain createPayment(Money paymentValue) {
         return PaymentDomain.builder()
                 .id(paymentIdGenerator.getNext())
                 .value(paymentValue)
@@ -37,7 +37,7 @@ public class PaymentProcessor implements PaymentService {
                 .build();
     }
 
-    private FastMoney calculatePaymentValue(FastMoney paymentValue) {
+    private Money calculatePaymentValue(Money paymentValue) {
         var paymentFee = paymentFeeCalculator.calculateFee(paymentValue);
         return paymentValue.add(paymentFee);
     }
