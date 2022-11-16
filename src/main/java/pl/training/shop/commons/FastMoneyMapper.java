@@ -1,6 +1,6 @@
 package pl.training.shop.commons;
 
-import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.Money;
 import org.mapstruct.Mapper;
 
 import java.util.Optional;
@@ -9,12 +9,12 @@ import java.util.function.Function;
 @Mapper(componentModel = "spring")
 public interface FastMoneyMapper {
 
-    default String toText(FastMoney money) {
-        return map(money, FastMoney::toString);
+    default String toText(Money money) {
+        return map(money, Money::toString);
     }
 
-    default FastMoney toMoney(String text) {
-        return map(text, FastMoney::parse);
+    default Money toMoney(String text) {
+        return map(text, Money::parse);
     }
 
     private <I, O> O map(I input, Function<I, O> mapper) {
