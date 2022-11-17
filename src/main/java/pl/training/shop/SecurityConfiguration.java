@@ -1,37 +1,37 @@
 package pl.training.shop;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-// https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
-@Configuration
-public class SecurityConfiguration {
+@KeycloakConfiguration
+public class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    @Override
+    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-           .mvcMatchers("/payments/process").hasRole("ADMIN")
-           .mvcMatchers("/**").permitAll()
-           .and()
-           .formLogin()
-                .loginPage("/login.html")
-                .loginProcessingUrl("/login.html")
-            .and()
-            .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout.html"))
-                .logoutSuccessUrl("/login.html")
-                .invalidateHttpSession(true);
-        return http.build();
+    @Autowired
+    public void authenticationManager(AuthenticationManagerBuilder authenticationManagerBuilder) {
+        var keycloakProvider = keycloakAuthenticationProvider();
+        keycloakProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
+        authenticationManagerBuilder.authenticationProvider(keycloakProvider);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        super.configure(http);
+        http
+                .authorizeRequests()
+                .mvcMatchers("/payments/process").hasRole("ADMIN")
+                .mvcMatchers("/**").permitAll();
     }
 
 }

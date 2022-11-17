@@ -14,3 +14,8 @@ spring:
 logging:
   level:
     org.javamoney.moneta: OFF
+keycloak:
+  realm: shop
+  resource: shop-client
+  public-client: true
+  auth-server-url: http://localhost:8100

@@ -1,5 +1,7 @@
 package pl.training.shop;
 
+import org.keycloak.adapters.KeycloakConfigResolver;
+import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -29,6 +31,11 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
         registry.addViewController("index.html").setViewName("index");
         registry.addViewController("login.html").setViewName("login-form");
         registry.addViewController("payments/payment-summary").setViewName("payments/payment-summary");
+    }
+
+    @Bean
+    public KeycloakConfigResolver keycloakConfigResolver() {
+        return new KeycloakSpringBootConfigResolver();
     }
 
 }
