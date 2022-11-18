@@ -19,7 +19,7 @@ import java.util.Optional;
 public class JpaPaymentRepositoryAdapter implements PaymentRepository {
 
     private final JpaPaymentRepository paymentRepository;
-    private final JpaPersistenceMapper mapper;
+    private final JpaPaymentPersistenceMapper mapper;
 
     @Override
     public PaymentDomain save(PaymentDomain paymentDomain) {
