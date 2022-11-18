@@ -41,7 +41,7 @@ public class BaseSecurityConfiguration extends KeycloakWebSecurityConfigurerAdap
     @Bean
     public CorsConfigurationSource corsConfiguration(@Value("${cors.origin}") String origin,
                                                      @Value("${cors.headers}") List<String> headers,
-                                                     @Value("${cors.origin}") List<String> methods) {
+                                                     @Value("${cors.methods}") List<String> methods) {
         var configuration = new CorsConfiguration();
         configuration.addAllowedOrigin(origin);
         configuration.setAllowedHeaders(headers);
