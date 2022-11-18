@@ -19,3 +19,7 @@ keycloak:
   resource: shop-client
   public-client: true
   auth-server-url: http://localhost:8100
+cors:
+  origin: http://localhost:4200
+  headers: "*"
+  methods: "*"
