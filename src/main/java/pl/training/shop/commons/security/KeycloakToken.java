@@ -2,6 +2,7 @@ package pl.training.shop.commons.security;
 
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.Token;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -11,16 +12,24 @@ public class KeycloakToken {
 
     private static final String TOKEN_PREFIX = "Bearer ";
 
+    public static Optional<String> getTokenString() {
+        return getPrincipal().map(KeycloakSecurityContext::getTokenString);
+    }
+
+    public static Optional<Token> getToken() {
+        return getPrincipal().map(KeycloakSecurityContext::getToken);
+    }
+
     @SuppressWarnings("unchecked")
-    public static Optional<String> get() {
+    public static Optional<KeycloakSecurityContext> getPrincipal() {
         return Optional.ofNullable(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
                 .map(authentication -> (KeycloakPrincipal<KeycloakSecurityContext>) authentication.getPrincipal())
-                .map(principal -> principal.getKeycloakSecurityContext().getTokenString());
+                .map(KeycloakPrincipal::getKeycloakSecurityContext);
     }
 
     public static Optional<String> getAuthorizationHeader() {
-        return get().map(token -> TOKEN_PREFIX + token);
+        return getTokenString().map(token -> TOKEN_PREFIX + token);
     }
 
 }
