@@ -45,7 +45,7 @@ public class PaymentWebAdapter {
         }
         var paymentRequestDomain = mapper.toDomain(paymentRequestViewModel);
         var paymentDomain = paymentService.process(paymentRequestDomain);
-        redirectAttributes.addFlashAttribute("payment", paymentDomain);
+        redirectAttributes.addFlashAttribute("payment", mapper.toViewModel(paymentDomain));
         return "redirect:/payments/payment-summary";
     }
 
