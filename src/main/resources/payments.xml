@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="paymentProcessor" class="pl.training.shop.payments.PaymentProcessor" init-method="init" destroy-method="destroy">
+        <constructor-arg name="paymentIdGenerator" ref="uuid"/>
+        <constructor-arg name="paymentFeeCalculator" ref="percentagePaymentFeeCalculator"/>
+        <constructor-arg name="paymentsRepository" ref="inMemoryPaymentRepository"/>
+        <constructor-arg name="timeProvider" ref="timeProvider"/>
+    </bean>
+
+    <bean id="uuid" class="pl.training.shop.payments.UuidPaymentIdGenerator"/>
+
+    <bean id="fake" class="pl.training.shop.payments.FakePaymentIdGenerator"/>
+
+    <bean id="percentagePaymentFeeCalculator" class="pl.training.shop.payments.PercentagePaymentFeeCalculator">
+        <constructor-arg name="percentage" value="0.01"/>
+    </bean>
+
+    <bean id="inMemoryPaymentRepository" class="pl.training.shop.payments.InMemoryPaymentRepository"/>
+
+    <bean id="consolePaymentLogger" class="pl.training.shop.payments.ConsolePaymentLogger"/>
+
+    <aop:config>
+        <aop:aspect ref="consolePaymentLogger">
+            <aop:after-returning pointcut="bean(paymentProcessor)" method="log" returning="payment"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
