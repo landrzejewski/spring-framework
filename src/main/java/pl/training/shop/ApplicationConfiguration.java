@@ -6,6 +6,7 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -64,6 +65,13 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        var messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("exceptions");
+        return messageSource;
     }
 
     @Bean
