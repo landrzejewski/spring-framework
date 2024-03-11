@@ -20,7 +20,7 @@
 
     <bean id="inMemoryPaymentRepository" class="pl.training.shop.payments.InMemoryPaymentRepository"/>
 
-    <bean id="consolePaymentLogger" class="pl.training.shop.payments.ConsolePaymentLogger"/>
+    <bean id="consolePaymentLogger" class="pl.training.shop.payments.ConsolePaymentLoggerAspect"/>
 
     <aop:config>
         <aop:aspect ref="consolePaymentLogger">
