@@ -6,7 +6,7 @@ import pl.training.shop.time.TimeProvider;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy // uruchomienie generowania proxy pod AOP
 @ComponentScan
 @Configuration
 public class ApplicationConfiguration {
