@@ -1,4 +1,4 @@
-package pl.training.shop.payments;
+package pl.training.shop.commons;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.AliasFor;
