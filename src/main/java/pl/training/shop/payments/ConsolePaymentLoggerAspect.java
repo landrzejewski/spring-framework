@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.springframework.core.annotation.Order;
 
 // Dzialnie aspektu wymaga stworzenia komponentu Spring i oznaczenia adnotacją @Aspect
+@Order(10_000)
 @Aspect
 @Log
 @RequiredArgsConstructor
