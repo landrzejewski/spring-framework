@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Log
 @RequiredArgsConstructor
-public class ConsolePaymentLogger {
+public class ConsolePaymentLoggerAspect {
 
     private static final String LOG_FORMAT = "A new payment of %s has been initiated";
 
