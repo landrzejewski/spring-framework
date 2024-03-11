@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
 
 @Aspect
-@Component
 @Log
 @RequiredArgsConstructor
-public class ConsolePaymentLogger {
+public class ConsolePaymentLoggerAspect {
 
     private static final String LOG_FORMAT = "A new payment of %s has been initiated";
 
