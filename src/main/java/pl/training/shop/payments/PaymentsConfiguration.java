@@ -3,6 +3,7 @@ package pl.training.shop.payments;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -55,5 +56,15 @@ public class PaymentsConfiguration {
         pointcut.setExpression("execution(pl.training.shop.payments.Payment pl.training.shop.payments.PaymentProcessor.getById(String))");
         return new DefaultPointcutAdvisor(pointcut, cacheAspect);
     }*/
+
+    @Bean
+    public PaymentCreatedPublisher paymentCreatedPublisher(ApplicationEventPublisher publisher) {
+        return new PaymentCreatedPublisher(publisher);
+    }
+
+    @Bean
+    public PaymentCreatedEventListener paymentCreatedEventListener() {
+        return new PaymentCreatedEventListener();
+    }
 
 }
