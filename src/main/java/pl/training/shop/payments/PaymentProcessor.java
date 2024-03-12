@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Component;
-import pl.training.shop.commons.aop.*;
+import org.springframework.transaction.annotation.Transactional;
+import pl.training.shop.commons.aop.Loggable;
+import pl.training.shop.commons.aop.MinLength;
 import pl.training.shop.time.TimeProvider;
 
-import static pl.training.shop.commons.aop.Lock.LockType.WRITE;
-import static pl.training.shop.commons.aop.Timer.TimeUnit.MS;
-
+@Transactional
 @Component
 @Log
 @RequiredArgsConstructor
@@ -20,9 +20,6 @@ public class PaymentProcessor implements PaymentService {
     private final PaymentRepository paymentsRepository;
     private final TimeProvider timeProvider;
 
-    @Lock(type = WRITE)
-    @Retry(attempts = 4)
-    @Timer(timeUnit = MS)
     @Loggable
     @Override
     public Payment process(PaymentRequest paymentRequest) {
