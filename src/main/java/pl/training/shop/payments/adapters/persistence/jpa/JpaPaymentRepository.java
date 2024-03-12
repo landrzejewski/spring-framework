@@ -1,26 +1,18 @@
 package pl.training.shop.payments.adapters.persistence.jpa;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import lombok.Setter;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-import java.util.Optional;
+import java.util.List;
 
-@Repository
-public class JpaPaymentRepository {
+public interface JpaPaymentRepository extends /*Repository<PaymentEntity, String>*/ /*CrudRepository<PaymentEntity, String>*/
+        JpaRepository<PaymentEntity, String> {
 
-    @Setter
-    @PersistenceContext
-    private EntityManager entityManager;
+    Page<PaymentEntity> findByStatus(String status, Pageable pageable);
 
-    public PaymentEntity save(PaymentEntity payment) {
-        entityManager.persist(payment);
-        return payment;
-    }
-
-    public Optional<PaymentEntity> findById(String id) {
-        return Optional.ofNullable(entityManager.find(PaymentEntity.class, id));
-    }
+    @Query("select p from Payment p where p.status = :status")
+    List<PaymentEntity> findAllByStatus(/*@Param("status")*/ String status);
 
 }
