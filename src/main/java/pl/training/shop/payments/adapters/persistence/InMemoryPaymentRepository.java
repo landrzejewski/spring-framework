@@ -1,6 +1,8 @@
 package pl.training.shop.payments.adapters.persistence;
 
 import lombok.Setter;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import pl.training.shop.payments.domain.Payment;
 import pl.training.shop.payments.ports.PaymentRepository;
@@ -9,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Primary
+@Profile("dev")
 @Repository
 public class InMemoryPaymentRepository implements PaymentRepository {
 
