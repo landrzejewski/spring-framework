@@ -7,32 +7,20 @@ import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import pl.training.shop.time.SystemTimeProvider;
-import pl.training.shop.time.TimeProvider;
 
 import javax.sql.DataSource;
-
 import java.util.Properties;
-
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 @PropertySource("classpath:jdbc.properties")
 @EnableTransactionManagement
-@EnableAspectJAutoProxy // uruchomienie generowania proxy pod AOP
+@EnableAspectJAutoProxy
 @ComponentScan
 @Configuration
 public class ApplicationConfiguration {
-
-    @Scope(SCOPE_PROTOTYPE) // domyślnie scope jest ustawiony na SINGLETON
-    @Bean({"timeProvider", "systemTimeProvider"}) // nadpisanie nazwy/nazw
-    public TimeProvider timeProvider() { // domyślnie nazwa metody to nazwa beana
-        return new SystemTimeProvider();
-    }
 
     @Bean
     public DataSource dataSource(Environment environment) {

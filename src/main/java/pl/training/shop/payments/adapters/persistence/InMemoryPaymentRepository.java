@@ -1,11 +1,15 @@
-package pl.training.shop.payments;
+package pl.training.shop.payments.adapters.persistence;
 
 import lombok.Setter;
+import org.springframework.stereotype.Repository;
+import pl.training.shop.payments.domain.Payment;
+import pl.training.shop.payments.ports.PaymentRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 public class InMemoryPaymentRepository implements PaymentRepository {
 
     @Setter

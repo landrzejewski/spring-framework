@@ -1,16 +1,15 @@
-package pl.training.shop.payments;
+package pl.training.shop.payments.domain;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import pl.training.shop.commons.aop.Atomic;
 import pl.training.shop.commons.aop.Loggable;
 import pl.training.shop.commons.aop.MinLength;
-import pl.training.shop.time.TimeProvider;
+import pl.training.shop.payments.ports.PaymentRepository;
+import pl.training.shop.payments.ports.PaymentService;
+import pl.training.shop.payments.ports.TimeProvider;
 
-@Transactional
-@Component
 @Log
 @RequiredArgsConstructor
 public class PaymentProcessor implements PaymentService {
@@ -20,6 +19,7 @@ public class PaymentProcessor implements PaymentService {
     private final PaymentRepository paymentsRepository;
     private final TimeProvider timeProvider;
 
+    @Atomic
     @Loggable
     @Override
     public Payment process(PaymentRequest paymentRequest) {
