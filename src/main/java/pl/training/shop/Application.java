@@ -17,7 +17,7 @@ import pl.training.shop.payments.ports.PaymentService;
 @RequiredArgsConstructor
 public class Application implements ApplicationRunner {
 
-    private static final String DEFAULT_CURRENCY_CODE = "PLN";
+    public static final String DEFAULT_CURRENCY_CODE = "PLN";
 
     private final PaymentService paymentService;
 

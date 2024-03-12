@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface JpaPaymentRepository extends /*Repository<PaymentEntity, String>*/ /*CrudRepository<PaymentEntity, String>*/
-        JpaRepository<PaymentEntity, String> {
+        JpaRepository<PaymentEntity, String>, JpaPaymentRepositoryExtensions {
 
     Page<PaymentEntity> findByStatus(String status, Pageable pageable);
 
