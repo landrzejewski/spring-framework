@@ -1,11 +1,14 @@
 package pl.training.shop.payments.adapters.rest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.training.shop.commons.data.Page;
 import pl.training.shop.commons.data.ResultPage;
+import pl.training.shop.commons.data.validation.Base;
 import pl.training.shop.commons.web.ExceptionDto;
 import pl.training.shop.commons.web.LocationUri;
 import pl.training.shop.payments.domain.PaymentNotFoundException;
@@ -24,7 +27,7 @@ public class PaymentRestController {
     private final PaymentRestMapper mapper;
 
     @PostMapping
-    public ResponseEntity<PaymentDto> process(@RequestBody PaymentRequestDto paymentRequestDto) {
+    public ResponseEntity<PaymentDto> process(@RequestBody /*@Valid*/ @Validated(Base.class) PaymentRequestDto paymentRequestDto) {
         var paymentRequest = mapper.toDomain(paymentRequestDto);
         var payment = paymentService.process(paymentRequest);
         var paymentDto = mapper.toDto(payment);
