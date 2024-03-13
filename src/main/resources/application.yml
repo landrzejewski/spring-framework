@@ -10,7 +10,7 @@ spring:
       maximum-pool-size: 5
   jpa:
     generate-ddl: true
-    open-in-view: false
+    open-in-view: false # true skutkuje otworzeniem dodatkowej transakcji na poziomie widoku (zaszlość historyczna/ant pattern), należy ustawić na fals
   #  jpa:
 #    hibernate:
 #      ddl-auto: create-drop
@@ -23,6 +23,8 @@ spring:
       port: 27017
       authentication-database: admin
       # auto-index-creation: true
+  messages:
+    basename: exceptions
 logging:
   level:
     org.javamoney.moneta: OFF

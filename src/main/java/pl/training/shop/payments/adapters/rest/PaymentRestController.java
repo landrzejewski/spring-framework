@@ -1,13 +1,17 @@
 package pl.training.shop.payments.adapters.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.training.shop.commons.data.Page;
 import pl.training.shop.commons.data.ResultPage;
+import pl.training.shop.commons.web.ExceptionDto;
 import pl.training.shop.commons.web.LocationUri;
+import pl.training.shop.payments.domain.PaymentNotFoundException;
 import pl.training.shop.payments.ports.PaymentService;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static pl.training.shop.payments.domain.PaymentStatus.STARTED;
 
 @RequestMapping("/api/payments")
@@ -31,8 +35,9 @@ public class PaymentRestController {
 
     @GetMapping("{id:\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}}")
     public PaymentDto getById(@PathVariable String id) {
-        var payment = paymentService.getById(id);
-        return mapper.toDto(payment);
+        //var payment = paymentService.getById(id);
+       // return mapper.toDto(payment);
+        throw new RuntimeException();
     }
 
     @GetMapping("started")
@@ -44,5 +49,13 @@ public class PaymentRestController {
         var resultPageDto = mapper.toDto(resultPage);
         return ResponseEntity.ok(resultPageDto);
     }
+
+   /*
+   @ExceptionHandler(PaymentNotFoundException.class)
+    public ResponseEntity<ExceptionDto> onPaymentNotFound(PaymentNotFoundException paymentNotFoundException) {
+        return ResponseEntity.status(NOT_FOUND)
+                .body(new ExceptionDto("Payment not found"));
+    }
+    */
 
 }
