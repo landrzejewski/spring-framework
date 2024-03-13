@@ -25,6 +25,11 @@ spring:
       # auto-index-creation: true
   messages:
     basename: exceptions
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
 logging:
   level:
     org.javamoney.moneta: OFF

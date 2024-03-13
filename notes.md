@@ -9,4 +9,4 @@ https://stackoverflow.com/questions/30549489/what-is-this-spring-jpa-open-in-vie
 
 - obrazy natywne
 - reload
-- 
+- spring admin
