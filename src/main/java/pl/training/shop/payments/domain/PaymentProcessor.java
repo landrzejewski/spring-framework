@@ -6,10 +6,13 @@ import org.javamoney.moneta.Money;
 import pl.training.shop.commons.aop.Atomic;
 import pl.training.shop.commons.aop.Loggable;
 import pl.training.shop.commons.aop.MinLength;
+import pl.training.shop.commons.data.Page;
+import pl.training.shop.commons.data.ResultPage;
 import pl.training.shop.payments.ports.PaymentRepository;
 import pl.training.shop.payments.ports.PaymentService;
 import pl.training.shop.payments.ports.TimeProvider;
 
+@Atomic
 @Log
 @RequiredArgsConstructor
 public class PaymentProcessor implements PaymentService {
@@ -19,7 +22,6 @@ public class PaymentProcessor implements PaymentService {
     private final PaymentRepository paymentsRepository;
     private final TimeProvider timeProvider;
 
-    @Atomic
     @Loggable
     @Override
     public Payment process(PaymentRequest paymentRequest) {
@@ -46,6 +48,11 @@ public class PaymentProcessor implements PaymentService {
     public Payment getById(@MinLength(16) String id) {
         return paymentsRepository.findById(id)
                 .orElseThrow(PaymentNotFoundException::new);
+    }
+
+    @Override
+    public ResultPage<Payment> getByStatus(PaymentStatus paymentStatus, Page page) {
+        return paymentsRepository.findByStatus(paymentStatus, page);
     }
 
     public void init() {
