@@ -2,18 +2,23 @@ package pl.training.shop;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import pl.training.shop.security.CustomAuthenticationFailureHandler;
-import pl.training.shop.security.CustomAuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import pl.training.shop.security.CustomEntryPoint;
+import pl.training.shop.security.RequestUrlAuthorizationManager;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import java.util.List;
 
+import static org.springframework.http.HttpMethod.POST;
+
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true/*, prePostEnabled = true*/)
 @Configuration
 public class SecurityConfiguration {
 
@@ -75,22 +80,53 @@ public class SecurityConfiguration {
     }*/
 
     @Bean
+    public CorsConfiguration corsConfiguration() {
+        var corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(List.of("http://localhost:4800"));
+        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        corsConfig.setAllowedHeaders(List.of("*"));
+        corsConfig.setAllowCredentials(true);
+        return corsConfig;
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .cors(config -> config.configurationSource(request -> corsConfiguration()))
+
+                .csrf(config -> config.ignoringRequestMatchers("/api/**"))
+
                 .authorizeHttpRequests(config -> config
-                        .anyRequest().authenticated()
+                        .requestMatchers("/login.html").permitAll()
+                        .requestMatchers(POST, "/payments/process").hasRole("ADMIN")
+                        //.requestMatchers("/product/{code:^[0-9]*$}").authenticated()
+                        //.requestMatchers("/**").authenticated()
+                        //.anyRequest().access(new WebExpressionAuthorizationManager("hasAuthority('WRITE')"))
+                        .anyRequest().access(new RequestUrlAuthorizationManager())
                 )
-                .httpBasic(withDefaults())
-                //.httpBasic(config -> config.realmName("Training"))
+
+                //.httpBasic(withDefaults())
+                .httpBasic(config -> config
+                        .realmName("Training")
+                        .authenticationEntryPoint(new CustomEntryPoint())
+                )
                 //.formLogin(withDefaults())
+
                 .formLogin(config -> config
                         .loginPage("/login.html")
-                        .defaultSuccessUrl("index.html")
+                        .defaultSuccessUrl("/index.html")
                         //.usernameParameter("username")
                         //.passwordParameter("password")
                         //.successHandler(new CustomAuthenticationSuccessHandler())
                         //.failureHandler(new CustomAuthenticationFailureHandler())
                 )
+
+                .logout(config -> config
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout.html"))
+                        .logoutSuccessUrl("/login.html")
+                        .invalidateHttpSession(true)
+                )
+
                 .build();
     }
 
