@@ -73,7 +73,7 @@ public class SecurityConfiguration {
         };
     }*/
 
-    /*@Bean2
+    /*@Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
         // return new InMemoryUserDetailsManager(user());
 
