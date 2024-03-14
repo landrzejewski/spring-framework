@@ -65,7 +65,7 @@ public class SecurityConfiguration {
 
     // Client scopes -> Client scope details (roles) -> Mapper details -> Add to userinfo enabled (Keycloak Admin console)
     private void userInfoCustomizer(OAuth2LoginConfigurer.UserInfoEndpointConfig userInfoEndpointConfig) {
-        userInfoEndpointConfig.userAuthoritiesMapper(new GitHubGrantedAuthoritiesMapper());
+        userInfoEndpointConfig.userAuthoritiesMapper(new KeycloakGrantedAuthoritiesMapper());
     }
 
 }
