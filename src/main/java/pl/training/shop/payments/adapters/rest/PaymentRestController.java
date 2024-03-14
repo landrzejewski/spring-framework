@@ -38,9 +38,8 @@ public class PaymentRestController {
 
     @GetMapping("{id:\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}}")
     public PaymentDto getById(@PathVariable String id) {
-        //var payment = paymentService.getById(id);
-       // return mapper.toDto(payment);
-        throw new RuntimeException();
+        var payment = paymentService.getById(id);
+        return mapper.toDto(payment);
     }
 
     @GetMapping("started")
