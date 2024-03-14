@@ -6,7 +6,4 @@ podman run --name postgres -d -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin 
 
 https://miro.com/app/board/uXjVMkTkdFk=/?share_link_id=160430500267
 https://stackoverflow.com/questions/30549489/what-is-this-spring-jpa-open-in-view-true-property-in-spring-boot
-
-- obrazy natywne
-- reload
-- spring admin
+https://www.restapitutorial.com
