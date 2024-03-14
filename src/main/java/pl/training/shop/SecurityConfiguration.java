@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import pl.training.shop.security.CustomAuthenticationFailureHandler;
+import pl.training.shop.security.CustomAuthenticationSuccessHandler;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -80,7 +82,15 @@ public class SecurityConfiguration {
                 )
                 .httpBasic(withDefaults())
                 //.httpBasic(config -> config.realmName("Training"))
-                .formLogin(withDefaults())
+                //.formLogin(withDefaults())
+                .formLogin(config -> config
+                        .loginPage("/login.html")
+                        .defaultSuccessUrl("index.html")
+                        //.usernameParameter("username")
+                        //.passwordParameter("password")
+                        //.successHandler(new CustomAuthenticationSuccessHandler())
+                        //.failureHandler(new CustomAuthenticationFailureHandler())
+                )
                 .build();
     }
 
