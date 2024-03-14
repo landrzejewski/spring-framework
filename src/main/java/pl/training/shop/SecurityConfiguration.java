@@ -4,20 +4,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import pl.training.shop.security.CustomEntryPoint;
 import pl.training.shop.security.RequestUrlAuthorizationManager;
+import pl.training.shop.security.SecurityContextLoggingFilter;
 
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.POST;
 
+//@EnableWebSecurity(debug = true)
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true/*, prePostEnabled = true*/)
 @Configuration
 public class SecurityConfiguration {
@@ -90,8 +94,10 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, SecurityContextLoggingFilter securityContextLoggingFilter) throws Exception {
         return httpSecurity
+                .addFilterBefore(securityContextLoggingFilter, ExceptionTranslationFilter.class)
+
                 .cors(config -> config.configurationSource(request -> corsConfiguration()))
 
                 .csrf(config -> config.ignoringRequestMatchers("/api/**"))
