@@ -11,11 +11,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import pl.training.shop.security.CustomEntryPoint;
 import pl.training.shop.security.RequestUrlAuthorizationManager;
 import pl.training.shop.security.SecurityContextLoggingFilter;
+import pl.training.shop.security.jwt.JwtAuthenticationFilter;
 
 import java.util.List;
 
@@ -94,8 +96,11 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, SecurityContextLoggingFilter securityContextLoggingFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
+                                                   JwtAuthenticationFilter jwtAuthenticationFilter,
+                                                   SecurityContextLoggingFilter securityContextLoggingFilter) throws Exception {
         return httpSecurity
+                .addFilterAt(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(securityContextLoggingFilter, ExceptionTranslationFilter.class)
 
                 .cors(config -> config.configurationSource(request -> corsConfiguration()))
