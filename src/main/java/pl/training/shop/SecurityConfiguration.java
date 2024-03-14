@@ -113,7 +113,7 @@ public class SecurityConfiguration {
                         //.requestMatchers("/product/{code:^[0-9]*$}").authenticated()
                         //.requestMatchers("/**").authenticated()
                         //.anyRequest().access(new WebExpressionAuthorizationManager("hasAuthority('WRITE')"))
-                        .anyRequest().access(new RequestUrlAuthorizationManager())
+                        //.anyRequest().access(new RequestUrlAuthorizationManager())
                 )
 
                 //.httpBasic(withDefaults())
