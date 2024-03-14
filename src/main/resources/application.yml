@@ -24,7 +24,7 @@ spring:
       authentication-database: admin
       # auto-index-creation: true
   messages:
-    basename: exceptions
+    basename: exceptions,text
 #management:
 #  endpoints:
 #    web:
