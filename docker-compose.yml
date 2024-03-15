@@ -20,7 +20,7 @@ services:
     volumes:
       - ./data/mongo:/data/mongo
   keycloak:
-    image: quay.io/keycloak/keycloak:22.0.4
+    image: quay.io/keycloak/keycloak
     command:
       - start-dev
     ports:
