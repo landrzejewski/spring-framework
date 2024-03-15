@@ -1,6 +1,5 @@
 package pl.training.shop.payments;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.training.shop.payments.domain.*;
@@ -14,7 +13,7 @@ public class PaymentsConfiguration {
     public PaymentProcessor paymentProcessor(
             PaymentIdGenerator uuidPaymentIdGenerator,
             PaymentFeeCalculator paymentFeeCalculator,
-            @Qualifier("mongoPaymentRepositoryAdapter") PaymentRepository paymentRepository,
+            PaymentRepository paymentRepository,
             TimeProvider timeProvider) {
         return new PaymentProcessor(uuidPaymentIdGenerator, paymentFeeCalculator, paymentRepository, timeProvider);
     }
