@@ -27,7 +27,7 @@ public class LogStatusTask implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        var future = taskScheduler.scheduleAtFixedRate(this::log, Duration.ofMillis(5_000));
+        // var future = taskScheduler.scheduleAtFixedRate(this::log, Duration.ofMillis(5_000));
         // future.cancel(false);
         // taskScheduler.schedule(this::log, new CronTrigger("0 15 9-17 * * MON-FRI"));
     }
