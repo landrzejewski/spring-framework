@@ -104,11 +104,7 @@ public class SecurityConfiguration {
 
                 .authorizeHttpRequests(config -> config
                         .requestMatchers("/login.html").permitAll()
-                        .requestMatchers(POST, "/payments/process").hasRole("ADMIN")
-                        //.requestMatchers("/product/{code:^[0-9]*$}").authenticated()
-                        //.requestMatchers("/**").authenticated()
-                        //.anyRequest().access(new WebExpressionAuthorizationManager("hasAuthority('WRITE')"))
-                        //.anyRequest().access(new RequestUrlAuthorizationManager())
+                        .anyRequest().hasRole("ADMIN")
                 )
 
                 //.httpBasic(withDefaults())
