@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static pl.training.shop.payments.PaymentsFixtures.*;
 import static pl.training.shop.payments.domain.PaymentStatus.STARTED;
 
-@WithMockUser(roles = "ADMIN")
 @SpringBootTest(classes = Application.class, webEnvironment = DEFINED_PORT)
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
@@ -40,9 +39,10 @@ class PaymentRestAdapterIntegrationTest {
         return paymentEntity;
     }
 
+    @WithMockUser(roles = "ADMIN")
     @Transactional
     @Test
-    void given_payment_exists_when_get_by_id_then_returns_payment() throws Exception {
+    void given_payment_exists_when_get_payment_by_id_then_returns_payment() throws Exception {
         var statusName = STARTED.name();
         initDatabase(statusName);
         mockMvc.perform(get("/api/payments/" + PAYMENT_ID).accept(APPLICATION_JSON))
@@ -50,6 +50,12 @@ class PaymentRestAdapterIntegrationTest {
                 .andExpect(jsonPath("$.id", is(PAYMENT_ID)))
                 .andExpect(jsonPath("$.value", is(PAYMENT.getValue().toString())))
                 .andExpect(jsonPath("$.status", is(statusName)));
+    }
+
+    @Test
+    void given_user_is_not_authenticated_when_access_api_then_returns_unauthorized() throws Exception {
+        mockMvc.perform(get("/api/payments/" + PAYMENT_ID).accept(APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
     }
 
 }
