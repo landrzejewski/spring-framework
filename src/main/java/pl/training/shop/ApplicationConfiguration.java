@@ -6,7 +6,7 @@ import pl.training.shop.time.TimeProvider;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
-@EnableAspectJAutoProxy
+// @EnableAspectJAutoProxy
 @ComponentScan
 @Configuration
 public class ApplicationConfiguration {

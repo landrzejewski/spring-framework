@@ -20,7 +20,7 @@ public class Application implements ApplicationRunner {
     private final PaymentService paymentService;
 
     public static void main(String[] args) {
-        SpringApplication.run(ApplicationRunner.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
     @Override
@@ -29,4 +29,5 @@ public class Application implements ApplicationRunner {
         var payment = paymentService.process(paymentRequest);
         log.info(payment.toString());
     }
+
 }
