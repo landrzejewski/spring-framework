@@ -7,9 +7,12 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.cli
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import pl.training.shop.security.KeycloakGrantedAuthoritiesMapper;
 import pl.training.shop.security.KeycloakJwtGrantedAuthoritiesConverter;
+import pl.training.shop.security.KeycloakLogoutHandler;
 
 import java.util.List;
 
@@ -35,6 +38,12 @@ public class SecurityConfiguration {
                 .oauth2Login(config -> config.userInfoEndpoint(this::userInfoCustomizer))
                 .authorizeHttpRequests(config -> config
                         .anyRequest().hasRole("ADMIN")
+                )
+                .logout(config -> config
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout.html"))
+                        .logoutSuccessUrl("/index.html")
+                        .addLogoutHandler(new KeycloakLogoutHandler(new RestTemplate()))
+                        .invalidateHttpSession(true)
                 )
                 .build();
     }
