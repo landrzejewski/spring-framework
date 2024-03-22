@@ -28,6 +28,7 @@ public class Application implements ApplicationRunner {
         var paymentRequest = new PaymentRequest(1L, Money.of(1_000, DEFAULT_CURRENCY_CODE));
         var payment = paymentService.process(paymentRequest);
         log.info(payment.toString());
+        paymentService.getById("1");
     }
 
 }

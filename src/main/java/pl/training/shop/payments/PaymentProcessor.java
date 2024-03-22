@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Component;
-import pl.training.shop.commons.aop.Loggable;
-import pl.training.shop.commons.aop.Retry;
-import pl.training.shop.commons.aop.Timer;
+import pl.training.shop.commons.aop.*;
 import pl.training.shop.time.TimeProvider;
 
+import static pl.training.shop.commons.aop.Lock.LockType.WRITE;
 import static pl.training.shop.commons.aop.Timer.TimeUnit.MS;
 
 @Component
@@ -21,6 +20,7 @@ public class PaymentProcessor implements PaymentService {
     private final PaymentRepository paymentsRepository;
     private final TimeProvider timeProvider;
 
+    @Lock(type = WRITE)
     @Retry(attempts = 4)
     // @Timer(timeUnit = MS)
     // @Loggable
@@ -28,8 +28,7 @@ public class PaymentProcessor implements PaymentService {
     public Payment process(PaymentRequest paymentRequest) {
         var paymentValue = calculatePaymentValue(paymentRequest.getValue());
         var payment = createPayment(paymentValue);
-        // return paymentsRepository.save(payment);
-        throw new RuntimeException();
+        return paymentsRepository.save(payment);
     }
 
     private Payment createPayment(Money paymentValue) {
@@ -47,7 +46,7 @@ public class PaymentProcessor implements PaymentService {
     }
 
     @Override
-    public Payment getById(String id) {
+    public Payment getById(@MinLength(16) String id) {
         return paymentsRepository.findById(id)
                 .orElseThrow(PaymentNotFoundException::new);
     }
