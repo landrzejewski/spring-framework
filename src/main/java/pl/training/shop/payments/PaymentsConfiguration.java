@@ -40,9 +40,4 @@ public class PaymentsConfiguration {
         return new InMemoryPaymentRepository();
     }
 
-    @Bean
-    public ConsolePaymentLoggerAspect consolePaymentLoggerAspect() {
-        return new ConsolePaymentLoggerAspect();
-    }
-
 }
