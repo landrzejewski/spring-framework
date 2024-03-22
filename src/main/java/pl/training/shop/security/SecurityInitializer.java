@@ -6,7 +6,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pl.training.shop.security.jwt.JwtService;
+import pl.training.shop.security.jwt.*;
 
 @Component
 @RequiredArgsConstructor

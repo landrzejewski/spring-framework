@@ -2,7 +2,7 @@ POST http://localhost:8000/api/payments
 Accept: application/json
 Content-Type: application/json
 #Authorization: Basic amFuOjEyMw==
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo4MDAwIiwidXNlciI6ImphbiIsInJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxNzEwNDE4OTQ0fQ.WN1tss08-DfIYOZ3N6-6iD8klynWgtjYB1-FpHSVf9M
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo4MDAwIiwidXNlciI6ImphbiIsInJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxNzExMTE2MTI5fQ.Uiah-2a9l8dGOwW6Q5nZMLVF8flxaYwnkZR183f6yQk
 
 {
   "id": 1,

@@ -6,11 +6,9 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import pl.training.shop.security.jwt.JwtAuthenticationProvider;
-import pl.training.shop.security.jwt.JwtService;
+import pl.training.shop.security.jwt.*;
 
 //@EnableMongoRepositories
 //@EnableJpaRepositories(repositoryImplementationPostfix = "Impl")
