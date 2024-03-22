@@ -4,11 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Component;
-import pl.training.shop.commons.aop.Loggable;
-import pl.training.shop.commons.aop.Timer;
 import pl.training.shop.time.TimeProvider;
-
-import static pl.training.shop.commons.aop.Timer.TimeUnit.MS;
 
 @Component
 @Log
@@ -20,13 +16,14 @@ public class PaymentProcessor implements PaymentService {
     private final PaymentRepository paymentsRepository;
     private final TimeProvider timeProvider;
 
-    @Timer(timeUnit = MS)
-    @Loggable
-    @Override
+    // @Timer(timeUnit = MS)
+    // @Loggable
+    // @Override
     public Payment process(PaymentRequest paymentRequest) {
         var paymentValue = calculatePaymentValue(paymentRequest.getValue());
         var payment = createPayment(paymentValue);
-        return paymentsRepository.save(payment);
+       // return paymentsRepository.save(payment);
+        throw new RuntimeException();
     }
 
     private Payment createPayment(Money paymentValue) {
