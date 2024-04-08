@@ -6,7 +6,6 @@ import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Component;
 import pl.training.shop.time.TimeProvider;
 
-@Component
 @Log
 @RequiredArgsConstructor
 public class PaymentProcessor implements PaymentService {
