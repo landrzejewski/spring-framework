@@ -16,6 +16,7 @@ import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import pl.training.shop.security.CustomEntryPoint;
+import pl.training.shop.security.RequestUrlAuthorizationManager;
 import pl.training.shop.security.SecurityContextLoggingFiler;
 
 import java.util.List;
@@ -80,12 +81,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(config -> config
                         .requestMatchers("/login.html").permitAll()
                         .requestMatchers(POST, "/payments/process").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().access(new RequestUrlAuthorizationManager())
                 )
-//                .httpBasic(config -> config
-//                        .realmName("Training")
-//                        .authenticationEntryPoint(new CustomEntryPoint())
-//                )
+                .httpBasic(config -> config
+                        .realmName("Training")
+                        .authenticationEntryPoint(new CustomEntryPoint())
+                )
                 .formLogin(config -> config
                         .loginPage("/login.html")
                         //.usernameParameter("login")
