@@ -19,7 +19,6 @@ public class PaymentWebController {
 
     private final PaymentService paymentService;
     private final PaymentWebMapper mapper;
-    private final SessionStore sessionStore;
 
     @GetMapping("process")
     public String showPaymentForm(Model model) {

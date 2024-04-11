@@ -14,7 +14,7 @@ public class PaymentsConfiguration {
     public PaymentProcessor paymentProcessor(
             PaymentIdGenerator uuidPaymentIdGenerator,
             PaymentFeeCalculator paymentFeeCalculator,
-            @Qualifier("mongoPaymentRepositoryAdapter") PaymentRepository paymentRepository,
+            @Qualifier("jpaPaymentRepositoryAdapter") PaymentRepository paymentRepository,
             TimeProvider timeProvider) {
         return new PaymentProcessor(uuidPaymentIdGenerator, paymentFeeCalculator, paymentRepository, timeProvider);
     }
