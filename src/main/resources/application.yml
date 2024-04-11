@@ -33,4 +33,9 @@ spring:
 logging:
   level:
     org.javamoney.moneta: OFF
+security:
+  username: jan
+  password: 123
+  email: jan@trainig.pl
+
 
