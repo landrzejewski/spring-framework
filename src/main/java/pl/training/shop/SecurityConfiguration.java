@@ -7,8 +7,12 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.cli
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.client.RestTemplate;
+import pl.training.shop.security.GitHubGrantedAuthoritiesMapper;
 import pl.training.shop.security.KeycloakGrantedAuthoritiesMapper;
 import pl.training.shop.security.KeycloakJwtGrantedAuthoritiesConverter;
+import pl.training.shop.security.KeycloakLogoutHandler;
 
 @Configuration
 public class SecurityConfiguration {
@@ -22,6 +26,12 @@ public class SecurityConfiguration {
                 )
                 .oauth2ResourceServer(config -> config.jwt(this::jwtConfigurer))
                 .oauth2Login(config -> config.userInfoEndpoint(this::userInfoCustomizer))
+                .logout(config -> config
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout.html"))
+                        .invalidateHttpSession(true)
+                        .addLogoutHandler(new KeycloakLogoutHandler(new RestTemplate()))
+                        .logoutSuccessUrl("/index.html")
+                )
                 .build();
     }
 
@@ -32,7 +42,7 @@ public class SecurityConfiguration {
     }
 
     private void userInfoCustomizer(OAuth2LoginConfigurer<HttpSecurity>.UserInfoEndpointConfig userInfoEndpointConfig) {
-        userInfoEndpointConfig.userAuthoritiesMapper(new KeycloakGrantedAuthoritiesMapper());
+        userInfoEndpointConfig.userAuthoritiesMapper(new GitHubGrantedAuthoritiesMapper());
     }
 
 }
