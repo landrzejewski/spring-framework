@@ -26,4 +26,4 @@ Authorization: Basic amFuOjEyMw==
 GET http://localhost:8000/api/users/me
 Accept: application/json
 Content-Type: application/json
-#Authorization: Basic amFuOjEyMw==
+Authorization: Basic amFuOjEyMw==

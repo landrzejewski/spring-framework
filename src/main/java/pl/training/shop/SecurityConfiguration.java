@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import pl.training.shop.security.CustomEntryPoint;
 
 import static org.springframework.http.HttpMethod.POST;
@@ -67,6 +69,13 @@ public class SecurityConfiguration {
                 )
                 .formLogin(config -> config
                         .loginPage("/login.html")
+                        //.usernameParameter("login")
+                        //.passwordParameter("pass")
+                )
+                .logout(config -> config
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout.html"))
+                        .logoutSuccessUrl("/login.html")
+                        .invalidateHttpSession(true)
                 )
                 .build();
     }
