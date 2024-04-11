@@ -5,17 +5,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
 import pl.training.shop.security.CustomEntryPoint;
+import pl.training.shop.security.SecurityContextLoggingFiler;
+
+import java.util.List;
 
 import static org.springframework.http.HttpMethod.POST;
 
+@EnableWebSecurity(debug = true)
 @Configuration
 public class SecurityConfiguration {
 
@@ -53,8 +60,20 @@ public class SecurityConfiguration {
     }*/
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public CorsConfiguration corsConfiguration() {
+        var corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(List.of("http://localhost:4800"));
+        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        corsConfig.setAllowedHeaders(List.of("*"));
+        corsConfig.setAllowCredentials(true);
+        return corsConfig;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityContextLoggingFiler securityContextLoggingFiler) throws Exception {
         return http
+                .addFilterBefore(securityContextLoggingFiler, ExceptionTranslationFilter.class)
+                .cors(config -> config.configurationSource(request -> corsConfiguration()))
                 .csrf(config -> config
                         .ignoringRequestMatchers("/api/**")
                 )
@@ -63,10 +82,10 @@ public class SecurityConfiguration {
                         .requestMatchers(POST, "/payments/process").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .httpBasic(config -> config
-                        .realmName("Training")
-                        .authenticationEntryPoint(new CustomEntryPoint())
-                )
+//                .httpBasic(config -> config
+//                        .realmName("Training")
+//                        .authenticationEntryPoint(new CustomEntryPoint())
+//                )
                 .formLogin(config -> config
                         .loginPage("/login.html")
                         //.usernameParameter("login")
