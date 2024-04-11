@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -12,18 +14,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import pl.training.shop.security.CustomEntryPoint;
 import pl.training.shop.security.RequestUrlAuthorizationManager;
 import pl.training.shop.security.SecurityContextLoggingFiler;
+import pl.training.shop.security.jwt.JwtAuthenticationFilter;
 
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.POST;
 
-@EnableWebSecurity(debug = true)
+//@EnableWebSecurity(debug = true)
+@EnableMethodSecurity(jsr250Enabled = true, securedEnabled = true)
 @Configuration
 public class SecurityConfiguration {
 
@@ -71,9 +76,11 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityContextLoggingFiler securityContextLoggingFiler) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityContextLoggingFiler securityContextLoggingFiler,
+        JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         return http
                 .addFilterBefore(securityContextLoggingFiler, ExceptionTranslationFilter.class)
+                .addFilterAt(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(config -> config.configurationSource(request -> corsConfiguration()))
                 .csrf(config -> config
                         .ignoringRequestMatchers("/api/**")
@@ -81,7 +88,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(config -> config
                         .requestMatchers("/login.html").permitAll()
                         .requestMatchers(POST, "/payments/process").hasRole("ADMIN")
-                        .anyRequest().access(new RequestUrlAuthorizationManager())
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(config -> config
                         .realmName("Training")

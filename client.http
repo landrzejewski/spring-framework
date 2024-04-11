@@ -19,7 +19,7 @@ Content-Type: application/json
 GET http://localhost:8000/api/payments/started?pageSize=3&pageNumber=1
 Accept: application/json
 Content-Type: application/json
-Authorization: Basic amFuOjEyMw==
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo4MDAwIiwidXNlciI6ImphbiIsInJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxNzEyODM0NTk2fQ.QzCJezxtxE67_IdYrSIwk6ZP6M8FIfVl6Uaunfdt9FI
 
 ###
 

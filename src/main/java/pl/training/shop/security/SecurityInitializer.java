@@ -2,12 +2,15 @@ package pl.training.shop.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import pl.training.shop.security.jwt.JwtService;
 
+@Log
 @Component
 @Setter
 @RequiredArgsConstructor
@@ -15,6 +18,7 @@ public class SecurityInitializer implements ApplicationRunner {
 
     private final JpaUserRepository jpaUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Value("${security.username}")
     private String username;
@@ -35,6 +39,7 @@ public class SecurityInitializer implements ApplicationRunner {
                     .build();
             jpaUserRepository.save(user);
         }
+        log.info("### " + jwtService.getToken(username, "ROLE_ADMIN"));
     }
 
 }
