@@ -25,6 +25,11 @@ spring:
       # auto-index-creation: true
   messages:
     basename: exceptions,text
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8100/realms/training
 #management:
 #  endpoints:
 #    web:
