@@ -39,6 +39,7 @@ public class PaymentsFixtures {
         var paymentDto = new PaymentDto();
         paymentDto.setId(payment.getId());
         paymentDto.setValue(payment.getValue().toString());
+        paymentDto.setStatus(payment.getStatus().name());
         return paymentDto;
     };
 
