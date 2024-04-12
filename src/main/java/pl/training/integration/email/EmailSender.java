@@ -8,15 +8,19 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class EmailSender implements ApplicationRunner {
 
     private final JavaMailSender javaMailSender;
+    private final TemplateService templateService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        var message = createMessage("training@sages.pl", new String[] { "client@training.pl"}, "Training", "Hello");
+        var text = templateService.process("ChatNotification", Map.of("value", "Test message"), "pl");
+        var message = createMessage("training@sages.pl", new String[] { "client@training.pl"}, "Training", text);
         javaMailSender.send(message);
     }
 

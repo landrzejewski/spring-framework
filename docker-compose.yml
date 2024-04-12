@@ -5,3 +5,11 @@ services:
     ports:
       - "8082:8082"
       - "10025:10025"
+  artemis:
+    image: quay.io/artemiscloud/activemq-artemis-broker
+    ports:
+      - "5672:5672"
+      - "61616:61616"
+    environment:
+      AMQ_USER: "admin"
+      AMQ_PASSWORD: "admin"
