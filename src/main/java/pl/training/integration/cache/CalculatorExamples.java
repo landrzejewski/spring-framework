@@ -19,18 +19,18 @@ public class CalculatorExamples implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         log.info("###################################################");
         log.info("1) calculate sum " + calculator.add(1, 2));
-        log.info("2) calculate sum " + calculator.add(1, 2));
+/*        log.info("2) calculate sum " + calculator.add(1, 2));
         calculator.rest();
         log.info("3) calculate sum " + calculator.add(1, 2));
         calculator.rest("add[1, 2]");
         log.info("4) calculate sum " + calculator.add(1, 2));
         calculator.put("add[1, 2]", 0);
-        log.info("5) calculate sum " + calculator.add(1, 2));
+        log.info("5) calculate sum " + calculator.add(1, 2));*/
         log.info("###################################################");
-        var cache = cacheManager.getCache("results");
+        /*var cache = cacheManager.getCache("results");
         if (cache != null) {
             cache.clear();
-        }
+        }*/
     }
 
 }
