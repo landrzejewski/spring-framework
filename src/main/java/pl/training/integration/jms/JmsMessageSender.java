@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class JmsSender implements ApplicationRunner {
+public class JmsMessageSender implements ApplicationRunner {
 
     private final JmsTemplate jmsTemplate;
 
