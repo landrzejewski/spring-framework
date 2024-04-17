@@ -19,11 +19,14 @@ public class PaymentWebController {
 
     private final PaymentService paymentService;
     private final PaymentWebMapper mapper;
+
     @GetMapping("process")
     public String showPaymentForm(Model model) {
         var paymentRequestViewModel = new PaymentRequestViewModel();
         paymentRequestViewModel.setValue("100 PLN");
         model.addAttribute("paymentRequest", paymentRequestViewModel);
+
+
         return "payments/payment-form";
     }
 
@@ -34,6 +37,7 @@ public class PaymentWebController {
         if (bindingResult.hasErrors()) {
             return "payments/payment-form";
         }
+
         var paymentRequest = mapper.toDomain(paymentRequestViewModel);
         var payment = paymentService.process(paymentRequest);
         var paymentViewModel = mapper.toViewModel(payment);
