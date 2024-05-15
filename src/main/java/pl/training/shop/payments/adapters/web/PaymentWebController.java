@@ -26,7 +26,6 @@ public class PaymentWebController {
         paymentRequestViewModel.setValue("100 PLN");
         model.addAttribute("paymentRequest", paymentRequestViewModel);
 
-
         return "payments/payment-form";
     }
 
@@ -41,6 +40,7 @@ public class PaymentWebController {
         var paymentRequest = mapper.toDomain(paymentRequestViewModel);
         var payment = paymentService.process(paymentRequest);
         var paymentViewModel = mapper.toViewModel(payment);
+
 
         redirectAttributes.addFlashAttribute("payment", paymentViewModel);
         return "redirect:/payments/payment-summary";
