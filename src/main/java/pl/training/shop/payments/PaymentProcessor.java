@@ -1,18 +1,15 @@
 package pl.training.shop.payments;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import pl.training.shop.commons.Generator;
+import org.springframework.stereotype.Service;
 import pl.training.shop.time.TimeProvider;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-@Component
+@Service
 @Log
 public class PaymentProcessor implements PaymentService {
 
