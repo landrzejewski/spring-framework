@@ -11,6 +11,14 @@ spring:
 #  jpa:
 #    hibernate:
 #      ddl-auto: create-drop
+  data:
+    mongodb:
+      username: admin
+      password: admin
+      database: payments
+      host: localhost
+      port: 27017
+      authentication-database: admin
 logging:
   level:
     org.javamoney.moneta: OFF

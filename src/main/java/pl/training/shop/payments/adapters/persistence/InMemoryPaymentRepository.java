@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Primary
-@Profile("dev")
+//@Primary
+//@Profile("dev")
 @Repository
 public class InMemoryPaymentRepository implements PaymentRepository {
 
