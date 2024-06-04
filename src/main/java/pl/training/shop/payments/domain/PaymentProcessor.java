@@ -10,6 +10,7 @@ import pl.training.shop.payments.ports.PaymentRepository;
 import pl.training.shop.payments.ports.PaymentService;
 import pl.training.shop.payments.ports.TimeProvider;
 
+@Atomic
 @Log
 @RequiredArgsConstructor
 public class PaymentProcessor implements PaymentService {
@@ -19,7 +20,6 @@ public class PaymentProcessor implements PaymentService {
     private final PaymentRepository paymentsRepository;
     private final TimeProvider timeProvider;
 
-    @Atomic
     @Loggable
     @Override
     public Payment process(PaymentRequest paymentRequest) {
