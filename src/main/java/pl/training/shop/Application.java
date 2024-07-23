@@ -15,10 +15,20 @@ public class Application {
         return new SystemTimeProvider();
     }
 
-    private static PaymentService paymentService(TimeProvider timeProvider) {
-        var paymentIdGenerator = new UuidPaymentIdGenerator();
-        var paymentFeeCalculator = new PercentagePaymentFeeCalculator(0.01);
-        var paymentRepository = new InMemoryPaymentRepository();
+    private static PaymentIdGenerator paymentIdGenerator() {
+        return new UuidPaymentIdGenerator();
+    }
+
+    private static PaymentFeeCalculator paymentFeeCalculator() {
+        return new PercentagePaymentFeeCalculator(0.01);
+    }
+
+    private static PaymentRepository paymentRepository() {
+        return new InMemoryPaymentRepository();
+    }
+
+    private static PaymentService paymentService(PaymentIdGenerator paymentIdGenerator, PaymentFeeCalculator paymentFeeCalculator,
+                                                 PaymentRepository  paymentRepository, TimeProvider timeProvider) {
         return new PaymentProcessor(paymentIdGenerator, paymentFeeCalculator, paymentRepository, timeProvider);
     }
 
@@ -27,8 +37,9 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        var timeProvider = timeProvider();
-        var paymentService = paymentServiceWithLogging(paymentService(timeProvider));
+        var paymentsProcessor = paymentService(paymentIdGenerator(), paymentFeeCalculator(), paymentRepository(), timeProvider());
+        var paymentService = paymentServiceWithLogging(paymentsProcessor);
+        //-------------
         var paymentRequest = new PaymentRequest(1L, Money.of(1_000, DEFAULT_CURRENCY_CODE));
         var payment = paymentService.process(paymentRequest);
         log.info(payment.toString());
