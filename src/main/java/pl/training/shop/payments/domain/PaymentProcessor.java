@@ -5,14 +5,12 @@ import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
 import pl.training.shop.commons.aop.Atomic;
 import pl.training.shop.commons.aop.Loggable;
-import pl.training.shop.commons.aop.MinLength;
 import pl.training.shop.payments.ports.PaymentRepository;
-import pl.training.shop.payments.ports.PaymentService;
 import pl.training.shop.payments.ports.TimeProvider;
 
 @Log
 @RequiredArgsConstructor
-public class PaymentProcessor implements PaymentService {
+public class PaymentProcessor {
 
     private final PaymentIdGenerator paymentIdGenerator;
     private final PaymentFeeCalculator paymentFeeCalculator;
@@ -21,7 +19,6 @@ public class PaymentProcessor implements PaymentService {
 
     @Atomic
     @Loggable
-    @Override
     public Payment process(PaymentRequest paymentRequest) {
         var paymentValue = calculatePaymentValue(paymentRequest.getValue());
         var payment = createPayment(paymentValue);
@@ -40,12 +37,6 @@ public class PaymentProcessor implements PaymentService {
     private Money calculatePaymentValue(Money paymentValue) {
         var paymentFee = paymentFeeCalculator.calculateFee(paymentValue);
         return paymentValue.add(paymentFee);
-    }
-
-    @Override
-    public Payment getById(@MinLength(16) String id) {
-        return paymentsRepository.findById(id)
-                .orElseThrow(PaymentNotFoundException::new);
     }
 
     public void init() {
