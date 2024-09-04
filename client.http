@@ -15,8 +15,6 @@ Content-Type: application/json
 
 ###
 
-###
-
 GET http://localhost:8000/api/payments?pageSize=20&statusFilter=STARTED
 Accept: application/json
 Content-Type: application/json

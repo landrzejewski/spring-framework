@@ -13,6 +13,7 @@ public class PaymentSearchRestController {
 
     private final PaymentSearch paymentSearch;
     private final PaymentRestMapper mapper;
+    // private final RestExceptionResponseBuilder exceptionResponseBuilder;
 
     @GetMapping("{id:\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}}")
     public PaymentDto getPaymentById(@PathVariable String id) {
@@ -30,5 +31,12 @@ public class PaymentSearchRestController {
         var result = paymentSearch.getByStatus(status, page);
         return ResponseEntity.ok(mapper.toDto(result));
     }
+
+    /*@ExceptionHandler(PaymentNotFoundException.class)
+    public ResponseEntity<ExceptionDto> onPaymentNotFound(PaymentNotFoundException paymentNotFoundException, Locale locale) {
+        *//*return ResponseEntity.status(NOT_FOUND)
+                .body(new ExceptionDto("Payment not found"));*//*
+        return exceptionResponseBuilder.build(paymentNotFoundException, NOT_FOUND, locale);
+    }*/
 
 }

@@ -10,8 +10,10 @@ spring:
     generate-ddl: true
     open-in-view: false
   #  jpa:
+  messages:
+    basename: exceptions
 #    hibernate:
-#      ddl-auto: create-drop
+#      ddl-auto: create-drops
 logging:
   level:
     org.javamoney.moneta: OFF
