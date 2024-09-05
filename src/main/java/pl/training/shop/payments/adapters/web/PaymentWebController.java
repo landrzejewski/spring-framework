@@ -2,6 +2,9 @@ package pl.training.shop.payments.adapters.web;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.training.shop.payments.ports.PaymentService;
+
+import javax.annotation.security.RolesAllowed;
 
 @RequestMapping("payments")
 @Controller
@@ -29,6 +34,12 @@ public class PaymentWebController {
         return "payments/payment-form";
     }
 
+    // @Secured("ROLE_MANAGER")
+    // @RolesAllowed("MANAGER")
+    // @PreAuthorize("#paymentRequestViewModel.value > 10")
+    // @PostAuthorize("returnObject.contains('payment-summary')")
+    // @PreFilter("filterObject.owner == authentication.name")
+    // @PostFilter("filterObject.owner == authentication.name")
     @PostMapping("process")
     public String process(@Valid @ModelAttribute("paymentRequest") PaymentRequestViewModel paymentRequestViewModel,
                           BindingResult bindingResult,

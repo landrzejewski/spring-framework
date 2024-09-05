@@ -11,9 +11,9 @@ spring:
   jpa:
     generate-ddl: true
     open-in-view: false # true skutkuje otworzeniem dodatkowej transakcji na poziomie widoku (zaszlość historyczna/ant pattern), należy ustawić na fals
-  #  jpa:
+#  jpa:
 #    hibernate:
-#      ddl-auto: create-drop
+#      ddl-auto: create
   data:
     mongodb:
       username: admin
@@ -33,4 +33,5 @@ spring:
 logging:
   level:
     org.javamoney.moneta: OFF
-
+jwt:
+  secret: sdfbk3js1zcvabfvae

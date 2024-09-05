@@ -46,4 +46,7 @@ public interface JpaPaymentRepository extends /*Repository<PaymentEntity, String
     @Query("update Payment p set p.value = p.value + :fee")
     void applyFee(double fee);
 
+    // @Query("select p from Payment p where p.status = :status and p.owner=?#{authentication.name}")
+    // List<PaymentEntity> finWithStatusSecured(String status);
+
 }
