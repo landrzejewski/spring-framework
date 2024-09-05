@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
+import pl.training.shop.security.GitHubGrantedAuthoritiesMapper;
 import pl.training.shop.security.KeycloakGrantedAuthoritiesMapper;
 import pl.training.shop.security.KeycloakJwtGrantedAuthoritiesConverter;
 import pl.training.shop.security.KeycloakLogoutHandler;
