@@ -20,7 +20,6 @@ public class PaymentProcessor implements PaymentService {
     private final PaymentRepository paymentsRepository;
     private final TimeProvider timeProvider;
 
-    @Lock(type = WRITE)
     @Retry(attempts = 4)
     @Timer(timeUnit = MS)
     @Loggable

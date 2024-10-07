@@ -1,13 +1,9 @@
 package pl.training.shop.payments;
 
-import org.springframework.aop.Advisor;
-import org.springframework.aop.aspectj.AspectJExpressionPointcut;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import pl.training.shop.commons.aop.CacheAspect;
 import pl.training.shop.time.TimeProvider;
 
 @Configuration
@@ -49,13 +45,6 @@ public class PaymentsConfiguration {
     public ConsolePaymentLoggerAspect consolePaymentLogger() {
         return new ConsolePaymentLoggerAspect();
     }
-
-    /*@Bean
-    public Advisor cacheAdvisor(CacheAspect cacheAspect) {
-        var pointcut = new AspectJExpressionPointcut();
-        pointcut.setExpression("execution(pl.training.shop.payments.Payment pl.training.shop.payments.PaymentProcessor.getById(String))");
-        return new DefaultPointcutAdvisor(pointcut, cacheAspect);
-    }*/
 
     @Bean
     public PaymentCreatedPublisher paymentCreatedPublisher(ApplicationEventPublisher publisher) {

@@ -20,7 +20,7 @@ public class Application {
             var id = payment.getId();
             log.info(paymentService.getById(id).toString());
             log.info(paymentService.getById(id).toString());
-            // log.info(paymentService.getById("123").toString());
+            log.info(paymentService.getById("123").toString());
         }
     }
 
