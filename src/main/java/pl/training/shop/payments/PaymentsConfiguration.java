@@ -56,4 +56,11 @@ public class PaymentsConfiguration {
         return new PaymentCreatedEventListener();
     }
 
+    /*@Bean
+    public Advisor cacheAdvisor(CacheAspect cacheAspect) {
+        var pointcut = new AspectJExpressionPointcut();
+        pointcut.setExpression("execution(pl.training.shop.payments.Payment pl.training.shop.payments.PaymentProcessor.getById(String))");
+        return new DefaultPointcutAdvisor(pointcut, cacheAspect);
+    }*/
+
 }
