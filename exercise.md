@@ -1,4 +1,4 @@
-Wykorzystując dotychczas zdobytą wiedzę (DI, AOP, Spring Boot, Spring Data Jpa, elementy clean architecture),
+Wykorzystując zdobytą wiedzę (DI, AOP, Spring Boot, Spring Data Jpa, elementy clean architecture),
 zaimplementuj fragment sklepu internetowego:
 UseCases:
 - przeglądanie produjktów w kategoriach
