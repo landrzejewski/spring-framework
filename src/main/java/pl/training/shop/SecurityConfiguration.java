@@ -2,17 +2,17 @@ package pl.training.shop;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import pl.training.shop.security.BasicAuthenticationEntryPoint;
 
-import javax.sql.DataSource;
+import java.util.List;
+
+import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 public class SecurityConfiguration {
@@ -22,7 +22,7 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    public UserDetails userDetails() {
+    /*public UserDetails userDetails() {
         return User
                 .withUsername("jan")
                 .password(passwordEncoder().encode("123"))
@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                 .authorities("read", "write")
                 .build();
 
-    }
+    }*/
 
     /*@Bean
     public UserDetailsService userDetailsService() {
@@ -52,5 +52,45 @@ public class SecurityConfiguration {
         manager.setAuthoritiesByUsernameQuery("select username, authority from authorities where username = ?");
         return manager;
     }*/
+
+    @Bean
+    public CorsConfiguration corsConfiguration() {
+        var corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(List.of("http://localhost:4800"));
+        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        corsConfig.setAllowedHeaders(List.of("*"));
+        corsConfig.setAllowCredentials(true);
+        return corsConfig;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .cors(config -> config.configurationSource(request -> corsConfiguration()))
+                .csrf(config -> config
+                        .ignoringRequestMatchers("/api/**")
+                )
+                .httpBasic(config -> config
+                        .realmName("Training")
+                        .authenticationEntryPoint(new BasicAuthenticationEntryPoint())
+                )
+                .formLogin(config -> config
+                        .loginPage("/login.html")
+                        .defaultSuccessUrl("/index.html")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                )
+                .authorizeHttpRequests(config -> config
+                        .requestMatchers("/login.html").permitAll()
+                        .requestMatchers(POST, "payments/process").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .logout(config -> config
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout.html"))
+                        //.logoutUrl("/logout.html")
+                        .invalidateHttpSession(true)
+                )
+                .build();
+    }
 
 }
