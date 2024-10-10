@@ -8,10 +8,11 @@ import static java.util.Collections.emptyList;
 public class JwtAuthentication extends AbstractAuthenticationToken {
 
     @Getter
-    private String token;
+    private final String token;
 
     public JwtAuthentication(String token) {
         super(emptyList());
+        this.token = token;
     }
 
     @Override

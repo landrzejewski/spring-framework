@@ -13,7 +13,8 @@ Authorization: Basic amFuOjEyMw==
 GET http://localhost:8000/api/payments/27053bac-8008-4171-a503-12fd0ce19226
 Accept: application/json
 Content-Type: application/json
-Authorization: Basic amFuOjEyMw==
+#Authorization: Basic amFuOjEyMw==
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo4MDAwIiwidXNlciI6ImphbiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiZXhwIjoxNzI4NTYwNTA3fQ.jH8TyxlgrNhKkjHzZKAUyvva8A3IrctBi3zgHjGSFTs
 
 ###
 
