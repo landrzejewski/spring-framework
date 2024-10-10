@@ -33,3 +33,5 @@ spring:
 logging:
   level:
     org.javamoney.moneta: OFF
+jwt:
+  secret: secret
