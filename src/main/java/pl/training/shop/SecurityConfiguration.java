@@ -2,6 +2,7 @@ package pl.training.shop;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpMethod.POST;
 
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 @Configuration
 public class SecurityConfiguration {
 
@@ -84,6 +86,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/login.html").permitAll()
                         .requestMatchers(POST, "payments/process").hasRole("ADMIN")
                         .anyRequest().authenticated()
+                        //.anyRequest().access(new RequestUrlAuthorizationManager())
                 )
                 .logout(config -> config
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout.html"))
