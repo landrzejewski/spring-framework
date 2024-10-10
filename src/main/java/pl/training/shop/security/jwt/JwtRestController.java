@@ -15,7 +15,7 @@ public class JwtRestController {
 
     private final JwtService jwtService;
 
-    @PostMapping("api/tokens")
+    @PostMapping("api/ttt")
     public ResponseEntity<TokenDto> login(@RequestBody CredentialsDto credentials) {
         var loginResult = login(credentials.getUsername(), credentials.getPassword());
         if (loginResult.isPresent()) {

@@ -27,3 +27,14 @@ GET http://localhost:8000/api/users/me
 Accept: application/json
 Content-Type: application/json
 Authorization: Basic amFuOjEyMw==
+
+###
+
+POST http://localhost:8000/api/ttt
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "jan",
+  "password": "123"
+}

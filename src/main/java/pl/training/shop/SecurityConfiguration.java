@@ -83,9 +83,10 @@ public class SecurityConfiguration {
                         .passwordParameter("password")
                 )
                 .authorizeHttpRequests(config -> config
-                        .requestMatchers("/login.html").permitAll()
-                        .requestMatchers(POST, "payments/process").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                                .requestMatchers("/api/ttt").permitAll()
+                                .requestMatchers("/login.html").permitAll()
+                                .requestMatchers(POST, "payments/process").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                         //.anyRequest().access(new RequestUrlAuthorizationManager())
                 )
                 .logout(config -> config

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import static org.springframework.security.authentication.UsernamePasswordAuthenticationToken.authenticated;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
