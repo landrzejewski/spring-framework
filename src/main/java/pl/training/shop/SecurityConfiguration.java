@@ -2,60 +2,26 @@ package pl.training.shop;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
-import pl.training.shop.security.BasicAuthenticationEntryPoint;
-import pl.training.shop.security.jwt.JwtAuthenticationFilter;
+import pl.training.shop.security.GitHubGrantedAuthoritiesMapper;
+import pl.training.shop.security.KeycloakGrantedAuthoritiesMapper;
+import pl.training.shop.security.KeycloakJwtGrantedAuthoritiesConverter;
+import pl.training.shop.security.KeycloakLogoutHandler;
 
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.POST;
 
-@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 @Configuration
 public class SecurityConfiguration {
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    /*public UserDetails userDetails() {
-        return User
-                .withUsername("jan")
-                .password(passwordEncoder().encode("123"))
-                .roles("ADMIN", "USER")
-                .authorities("read", "write")
-                .build();
-
-    }*/
-
-    /*@Bean
-    public UserDetailsService userDetailsService() {
-        return username -> {
-            var user = userDetails();
-            if (username.equals(user.getUsername())) {
-                return user;
-            } else {
-                throw new UsernameNotFoundException(username);
-            }
-        };
-    }*/
-
-   /* @Bean
-    public UserDetailsManager userDetailsManager(DataSource dataSource) {
-        // return new InMemoryUserDetailsManager(userDetails());
-        var manager = new JdbcUserDetailsManager(dataSource);
-        manager.setUsersByUsernameQuery("select username, password, enabled from users where username = ?");
-        manager.setAuthoritiesByUsernameQuery("select username, authority from authorities where username = ?");
-        return manager;
-    }*/
 
     @Bean
     public CorsConfiguration corsConfiguration() {
@@ -68,36 +34,41 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(config -> config.configurationSource(request -> corsConfiguration()))
                 .csrf(config -> config
                         .ignoringRequestMatchers("/api/**")
                 )
-                .httpBasic(config -> config
-                        .realmName("Training")
-                        .authenticationEntryPoint(new BasicAuthenticationEntryPoint())
-                )
-                .formLogin(config -> config
-                        .loginPage("/login.html")
-                        .defaultSuccessUrl("/index.html")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                )
+                .oauth2Login(config -> config.userInfoEndpoint(this::userInfo))
+                .oauth2ResourceServer(config -> config.jwt(this::configJwt))
                 .authorizeHttpRequests(config -> config
-                                .requestMatchers("/api/ttt").permitAll()
-                                .requestMatchers("/login.html").permitAll()
-                                .requestMatchers(POST, "payments/process").hasRole("ADMIN")
-                                .anyRequest().authenticated()
-                        //.anyRequest().access(new RequestUrlAuthorizationManager())
+                        .anyRequest().hasRole("ADMIN")
                 )
                 .logout(config -> config
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout.html"))
-                        //.logoutUrl("/logout.html")
+                        .logoutSuccessUrl("/index.html")
                         .invalidateHttpSession(true)
+                        .addLogoutHandler(new KeycloakLogoutHandler(new RestTemplate()))
                 )
                 .build();
     }
+
+    private void userInfo(OAuth2LoginConfigurer<HttpSecurity>.UserInfoEndpointConfig userInfoEndpointConfig) {
+        userInfoEndpointConfig.userAuthoritiesMapper(new GitHubGrantedAuthoritiesMapper());
+    }
+
+    private void configJwt(OAuth2ResourceServerConfigurer<HttpSecurity>.JwtConfigurer jwtConfigurer) {
+        var converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(new KeycloakJwtGrantedAuthoritiesConverter());
+        jwtConfigurer.jwtAuthenticationConverter(converter);
+    }
+
+   /* @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        var converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(new KeycloakJwtGrantedAuthoritiesConverter());
+        return converter;
+    }*/
 
 }

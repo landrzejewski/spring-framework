@@ -14,7 +14,7 @@ GET http://localhost:8000/api/payments/27053bac-8008-4171-a503-12fd0ce19226
 Accept: application/json
 Content-Type: application/json
 #Authorization: Basic amFuOjEyMw==
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo4MDAwIiwidXNlciI6ImphbiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiZXhwIjoxNzI4NTYwNTA3fQ.jH8TyxlgrNhKkjHzZKAUyvva8A3IrctBi3zgHjGSFTs
+Authorization: Bearer {{token}}
 
 ###
 
@@ -39,3 +39,31 @@ Content-Type: application/json
   "username": "jan",
   "password": "123"
 }
+
+###
+
+//@no-redirect
+//@no-cookie-jar
+POST http://localhost:8100/realms/training/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=training-client&grant_type=password&username=jan&password=123
+
+> {%
+    client.global.set('token', response.body.access_token);
+    client.global.set('refreshToken', response.body.refresh_token);
+%}
+
+###
+
+//@no-redirect
+//@no-cookie-jar
+POST http://localhost:8100/realms/training/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=training-client&grant_type=refresh_token&refresh_token={{refreshToken}}
+
+> {%
+    client.global.set('token', response.body.access_token);
+    client.global.set('refreshToken', response.body.refresh_token);
+%}

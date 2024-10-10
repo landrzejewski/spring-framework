@@ -25,6 +25,26 @@ spring:
       # auto-index-creation: true
   messages:
     basename: exceptions,text
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8100/realms/training
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8100/realms/training
+        registration:
+          keycloak:
+            client-id: training-client
+            scope:
+              - openid
+#          github:
+#            client-id: Ov23li3jAyd5a1PylMo4
+#            client-secret: ea9a685e3ecc9c664e283165eb2c95a9d7a68c1b
+
+
+
 #management:
 #  endpoints:
 #    web:
@@ -33,5 +53,3 @@ spring:
 logging:
   level:
     org.javamoney.moneta: OFF
-jwt:
-  secret: secret
