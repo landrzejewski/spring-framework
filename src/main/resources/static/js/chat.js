@@ -1,5 +1,6 @@
 $(() => {
 
+    const clientId = crypto.randomUUID();
     const messages = $('#messages');
     const username = $('#username');
     const recipients = $('#recipients');
@@ -25,7 +26,7 @@ $(() => {
     const connect = () => {
         const socket = SockJS("/chat");
         client = Stomp.over(socket);
-        client.connect({}, onConnected);
+        client.connect({username: username.val(), clientId}, onConnected);
     };
 
     const onConnected = () => {
