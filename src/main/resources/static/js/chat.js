@@ -24,6 +24,7 @@ $(() => {
         connectBtn.prop(disabledProperty, isConnected);
         disconnectBtn.prop(disabledProperty, !isConnected);
         sendBtn.prop(disabledProperty, !isConnected);
+        isVisibleBtn.prop(disabledProperty, !isConnected);
     };
 
     const connect = () => {
@@ -72,11 +73,11 @@ $(() => {
     };
 
     function changeVisibility() {
+        let isVisible = true;
         if($(this).is(':checked')) {
-            console.log("1");
-        } else {
-            console.log("0");
+            isVisible = false;
         }
+        client.send('/ws/users', {}, JSON.stringify({isVisible}));
     }
 
     updateView(false);

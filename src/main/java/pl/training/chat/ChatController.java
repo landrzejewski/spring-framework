@@ -17,6 +17,7 @@ import static java.time.Instant.now;
 public class ChatController {
 
     private final SimpMessagingTemplate messagingTemplate;
+    private final SystemMessageSender systemMessageSender;
     private final InMemoryChatUserRepository userRepository;
 
     @Value("${main-topic}")
@@ -40,6 +41,12 @@ public class ChatController {
 
     private void sendMessage(ChatUser user, ChatMessage message) {
         messagingTemplate.convertAndSend(privateTopicPrefix + user.privateClientId(), message);
+    }
+
+    @MessageMapping("/users")
+    public void onUserUpdate(UserStatus userStatus, @Header("simpSessionId") String socketId) {
+        userRepository.updateStatus(socketId, userStatus.isVisible());
+        systemMessageSender.updateUserList();
     }
 
     /*@MessageMapping("/chat")

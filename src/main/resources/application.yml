@@ -1,4 +1,4 @@
 main-topic: /main
 user-list-topic: /user-list
 private-topic-prefix: /private-
-update-contacts-delay-in-mills: 500
+update-contacts-delay-in-mills: 100

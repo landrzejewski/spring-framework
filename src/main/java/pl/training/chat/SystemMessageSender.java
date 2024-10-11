@@ -38,7 +38,8 @@ public class SystemMessageSender {
     }
 
     public void updateUserList() {
-        var chatUsers = userRepository.getAll();
+        var chatUsers = userRepository.getAll()
+                .stream().filter(ChatUser::isVisible);
         var executionTime = Instant.now().plusMillis(updateDelay);
         taskScheduler.schedule(() -> messagingTemplate.convertAndSend(userListTopic, chatUsers), executionTime);
     }

@@ -27,7 +27,8 @@ public class WebSocketConnectListener {
         var user = new ChatUser(
                 getNativeHeader(event, CLIENT_ID_HEADER),
                 getNativeHeader(event, PRIVATE_CLIENT_ID_HEADER),
-                getNativeHeader(event, USERNAME_HEADER)
+                getNativeHeader(event, USERNAME_HEADER),
+                true
         );
         log.info("Socket with id: %s is connected (username: %s)".formatted(socketId, user.username()));
         userRepository.put(socketId, user);
