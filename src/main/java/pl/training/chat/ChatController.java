@@ -6,7 +6,6 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -30,15 +29,12 @@ public class ChatController {
     @MessageMapping("/chat")
     public void onMessage(ChatMessage chatMessage, @Header("simpSessionId") String socketId/*, SimpMessageHeaderAccessor headerAccessor*/) {
         /*var attributes = headerAccessor.getSessionAttributes();*/
-
         var message = chatMessage.withTimestamp(now());
         if (message.isBroadcast()) {
             messagingTemplate.convertAndSend(mainTopic, message);
         } else {
-            userRepository.get(socketId)
-                    .ifPresent(chatUser -> sendMessage(chatUser, message));
-            userRepository.findByClientIds(message.getRecipients())
-                    .forEach(chatUser -> sendMessage(chatUser, message));
+            userRepository.get(socketId).ifPresent(user -> sendMessage(user, message));
+            userRepository.findByClientIds(message.getRecipients()).forEach(user -> sendMessage(user, message));
         }
     }
 

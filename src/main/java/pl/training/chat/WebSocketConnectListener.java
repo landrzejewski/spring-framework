@@ -24,14 +24,14 @@ public class WebSocketConnectListener {
     @EventListener
     public void onConnect(SessionConnectEvent event) {
         var socketId = getSocketId(event);
-        var chatUser = new ChatUser(
+        var user = new ChatUser(
                 getNativeHeader(event, CLIENT_ID_HEADER),
                 getNativeHeader(event, PRIVATE_CLIENT_ID_HEADER),
                 getNativeHeader(event, USERNAME_HEADER)
         );
-        log.info("Socket with id: %s is connected (username: %s)".formatted(socketId, chatUser.username()));
-        userRepository.put(socketId, chatUser);
-        systemMessageSender.sendToAll("User %s is connected".formatted(chatUser.username()));
+        log.info("Socket with id: %s is connected (username: %s)".formatted(socketId, user.username()));
+        userRepository.put(socketId, user);
+        systemMessageSender.sendToAll("User %s is connected".formatted(user.username()));
         systemMessageSender.updateUserList();
     }
 

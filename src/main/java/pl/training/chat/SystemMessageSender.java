@@ -30,11 +30,11 @@ public class SystemMessageSender {
     private final TaskScheduler taskScheduler;
 
     public void sendToAll(String text) {
-        var messageDto = ChatMessage.builder()
+        var message = ChatMessage.builder()
                 .sender(SYSTEM_SENDER)
                 .text(text)
                 .build();
-        messagingTemplate.convertAndSend(mainTopic, messageDto);
+        messagingTemplate.convertAndSend(mainTopic, message);
     }
 
     public void updateUserList() {
