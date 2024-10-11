@@ -18,6 +18,7 @@ public class ApplicationConfiguration implements WebSocketMessageBrokerConfigure
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat")
+                .addInterceptors(new WebSocketHandshakeInterceptor())
                 .withSockJS();
     }
 
