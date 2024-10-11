@@ -9,7 +9,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatMessageDto {
+public class ChatMessage {
 
     private String sender;
     private Set<String> recipients;
@@ -17,5 +17,9 @@ public class ChatMessageDto {
     @With
     @Builder.Default
     private Instant timestamp = Instant.now();
+
+    public boolean isBroadcast() {
+        return recipients == null || recipients.isEmpty();
+    }
 
 }

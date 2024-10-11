@@ -1,9 +1,13 @@
 package pl.training.chat;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import static java.time.Instant.now;
@@ -13,10 +17,39 @@ import static java.time.Instant.now;
 @RequiredArgsConstructor
 public class ChatController {
 
+    private final SimpMessagingTemplate messagingTemplate;
+    private final InMemoryChatUserRepository userRepository;
+
+    @Value("${main-topic}")
+    @Setter
+    private String mainTopic;
+    @Value("${private-topic-prefix}")
+    @Setter
+    private String privateTopicPrefix;
+
     @MessageMapping("/chat")
-    @SendTo("/main")
-    public ChatMessageDto onMessage(ChatMessageDto chatMessageDto) {
-        return chatMessageDto.withTimestamp(now());
+    public void onMessage(ChatMessage chatMessage, @Header("simpSessionId") String socketId/*, SimpMessageHeaderAccessor headerAccessor*/) {
+        /*var attributes = headerAccessor.getSessionAttributes();*/
+
+        var message = chatMessage.withTimestamp(now());
+        if (message.isBroadcast()) {
+            messagingTemplate.convertAndSend(mainTopic, message);
+        } else {
+            userRepository.get(socketId)
+                    .ifPresent(chatUser -> sendMessage(chatUser, message));
+            userRepository.findByClientIds(message.getRecipients())
+                    .forEach(chatUser -> sendMessage(chatUser, message));
+        }
     }
+
+    private void sendMessage(ChatUser user, ChatMessage message) {
+        messagingTemplate.convertAndSend(privateTopicPrefix + user.privateClientId(), message);
+    }
+
+    /*@MessageMapping("/chat")
+    @SendTo("/main")
+    public ChatMessage onMessage(ChatMessage chatMessage) {
+        return chatMessage.withTimestamp(now());
+    }*/
 
 }

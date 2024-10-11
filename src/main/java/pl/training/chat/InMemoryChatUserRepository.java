@@ -3,6 +3,7 @@ package pl.training.chat;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.util.Collections.synchronizedMap;
 
@@ -25,6 +26,10 @@ public class InMemoryChatUserRepository {
 
     public Collection<ChatUser> getAll() {
         return users.values();
+    }
+
+    public Stream<ChatUser> findByClientIds(Set<String> clientIds) {
+        return getAll().stream().filter(chatUser -> clientIds.contains(chatUser.clientId()));
     }
 
 }

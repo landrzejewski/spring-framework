@@ -1,6 +1,7 @@
 $(() => {
 
     const clientId = crypto.randomUUID();
+    const privateClientId = crypto.randomUUID();
     const messages = $('#messages');
     const username = $('#username');
     const recipients = $('#recipients');
@@ -8,30 +9,33 @@ $(() => {
     const connectBtn = $('#connectBtn');
     const disconnectBtn = $('#disconnectBtn');
     const sendBtn = $('#sendBtn');
+    const disabledProperty = 'disabled';
 
     let client = null;
 
     const updateView = (isConnected) => {
-        username.prop('disabled', isConnected);
-        recipients.prop('disabled', !isConnected);
-        message.prop('disabled', !isConnected);
+        username.prop(disabledProperty, isConnected);
+        recipients.prop(disabledProperty, !isConnected);
+        message.prop(disabledProperty, !isConnected);
         if (isConnected) {
             messages.text('');
         }
-        connectBtn.prop('disabled', isConnected);
-        disconnectBtn.prop('disabled', !isConnected);
-        sendBtn.prop('disabled', !isConnected);
+        connectBtn.prop(disabledProperty, isConnected);
+        disconnectBtn.prop(disabledProperty, !isConnected);
+        sendBtn.prop(disabledProperty, !isConnected);
     };
 
     const connect = () => {
-        const socket = SockJS("/chat");
+        const socket = new WebSocket('/chat'); // SockJS("/chat");
         client = Stomp.over(socket);
-        client.connect({username: username.val(), clientId}, onConnected);
+        client.connect({username: username.val(), clientId, privateClientId}, onConnected);
     };
 
     const onConnected = () => {
         updateView(true);
         client.subscribe('/main', onMessage);
+        client.subscribe('/private-' + privateClientId, onMessage);
+        client.subscribe('/user-list', onUserListUpdated);
     };
 
     const disconnect = () => {
@@ -40,13 +44,16 @@ $(() => {
     };
 
     const send = () => {
-        const messageDto = {
-            sender: username.val(),
-            recipients: [],
-            text: message.val()
-        };
-        client.send('/ws/chat', {}, JSON.stringify(messageDto));
-        message.val('');
+        const text = message.val();
+        if (text) {
+            const messageDto = {
+                sender: username.val(),
+                recipients: recipients.val(),
+                text
+            };
+            client.send('/ws/chat', {}, JSON.stringify(messageDto));
+            message.text('');
+        }
     };
 
     const onMessage = (socketMessage) => {
@@ -54,6 +61,14 @@ $(() => {
         const timestamp = new Date(messageDto.timestamp).toLocaleTimeString();
         $(`<p>${timestamp} ${messageDto.sender}: ${messageDto.text}</p>`).appendTo(messages);
     };
+
+    const onUserListUpdated = (socketMessage) => {
+        const usersDto = JSON.parse(socketMessage.body);
+        recipients.empty();
+        usersDto
+            .filter(user => user.clientId !== clientId)
+            .forEach(user => $(`<option value="${user.clientId}">${user.username} (${user.clientId})</option>`).appendTo(recipients));
+    }
 
     updateView(false);
     connectBtn.click(connect);
