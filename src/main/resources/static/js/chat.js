@@ -8,6 +8,7 @@ $(() => {
     const message = $('#message');
     const connectBtn = $('#connectBtn');
     const disconnectBtn = $('#disconnectBtn');
+    const isVisibleBtn = $('#isVisibleBtn');
     const sendBtn = $('#sendBtn');
     const disabledProperty = 'disabled';
 
@@ -68,11 +69,20 @@ $(() => {
         usersDto
             .filter(user => user.clientId !== clientId)
             .forEach(user => $(`<option value="${user.clientId}">${user.username} (${user.clientId})</option>`).appendTo(recipients));
+    };
+
+    function changeVisibility() {
+        if($(this).is(':checked')) {
+            console.log("1");
+        } else {
+            console.log("0");
+        }
     }
 
     updateView(false);
     connectBtn.click(connect);
     disconnectBtn.click(disconnect);
     sendBtn.click(send);
+    isVisibleBtn.change(changeVisibility);
 
 });
