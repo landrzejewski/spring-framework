@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @Log
 public class ReportingService {
 
-    @Cacheable(/*condition = "#month < 6"*//*, unless = "#month < 6"*/)// (cacheNames = "reports", keyGenerator = "simpleKeyGenerator")
+    @Cacheable
     public double generateMonthlySalesReport(int month, int year) {
         log.info("Generating monthly sales report");
         return (month + year) * 0.3;
     }
 
-    @CacheEvict(/*cacheNames = "reports",*/ allEntries = true)
+    @CacheEvict(allEntries = true)
     public void restart() {
         log.info("Resetting monthly sales cache");
     }

@@ -4,7 +4,7 @@ import lombok.extern.java.Log;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
-@Component
+// @Component
 @Log
 public class JmsMessageListener {
 
