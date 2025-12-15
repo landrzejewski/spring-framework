@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
 
 @Aspect
-@Component
 @Log
 @RequiredArgsConstructor
 public class ConsolePaymentLoggerAspect {
