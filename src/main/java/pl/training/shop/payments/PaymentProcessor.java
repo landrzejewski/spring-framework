@@ -1,18 +1,44 @@
 package pl.training.shop.payments;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import pl.training.shop.commons.Generator;
 import pl.training.shop.time.TimeProvider;
 
+@Log
 @Component
-@RequiredArgsConstructor
 public class PaymentProcessor implements PaymentService {
 
-    private final PaymentIdGenerator paymentIdGenerator;
-    private final PaymentFeeCalculator paymentFeeCalculator;
-    private final PaymentRepository paymentsRepository;
-    private final TimeProvider timeProvider;
+    private PaymentIdGenerator paymentIdGenerator;
+    private PaymentFeeCalculator paymentFeeCalculator;
+    private PaymentRepository paymentsRepository;
+    // @Autowired // zła praktyka
+    private TimeProvider timeProvider;
+
+    @Autowired // oznacza konieczność wstrzyknięcia zależności, jeżeli istnieje tylko jeden konstruktor z parametrami, to Spring uznaje go jako domyślny i z jego użyciem tworzy instancję
+    // (w tym przypadku @Autowired nie jest wymagane, ale jest wskazane - jeżli nie użyjemy @Autowire to Spring wybierze konstruktor bezargumentowy)
+    public PaymentProcessor(
+            PaymentIdGenerator paymentIdGenerator,
+            // @Qualifier("fake") PaymentIdGenerator paymentIdGenerator, // kwalifikacja z użyciem nazwy i adnotacji @Qualifier
+            // @Generator("fake") PaymentIdGenerator paymentIdGenerator, // kwalifikacja z użyciem nazwy i adnotacji niestandardowej
+            // PaymentIdGenerator fake, // kwalifikacja przez nazwę argumentu/beana
+            // PaymentIdGenerator paymentIdGenerator, // kwalifikacja przez wybór implementacji adnotacją @Primary
+            PaymentFeeCalculator paymentFeeCalculator,
+            PaymentRepository paymentsRepository) {
+        this.paymentIdGenerator = paymentIdGenerator;
+        this.paymentFeeCalculator = paymentFeeCalculator;
+        this.paymentsRepository = paymentsRepository;
+    }
+
+    @Autowired
+    public void setTimeProvider(TimeProvider timeProvider) {
+        this.timeProvider = timeProvider;
+    }
 
     @Override
     public Payment process(PaymentRequest paymentRequest) {
@@ -33,6 +59,23 @@ public class PaymentProcessor implements PaymentService {
     private Money calculatePaymentValue(Money paymentValue) {
         var paymentFee = paymentFeeCalculator.calculateFee(paymentValue);
         return paymentValue.add(paymentFee);
+    }
+
+    // Wymagania dla metod związanych z cyklem życia
+    // - brak argumentów
+    // - brak resultatu
+    // - brak wyjątków typu Exception
+
+    // Metoda do inicjalizaji - wołana po wstrzyknięciu wszystkich zależności
+    @PostConstruct
+    public void init() {
+        log.info("Initializing Payment processor");
+    }
+
+    // Metoda do sprzątania - wołana po przed zniszczeniem beana (zwolnieniem referencji), działa tylko dal scope SINGLETON i przy prawidłowym zatrzymaniu kontenera
+    @PreDestroy
+    public void destroy() {
+        log.info("Destroying Payment processor");
     }
 
 }
