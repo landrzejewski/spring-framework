@@ -1,0 +1,18 @@
+package pl.training.shop.commons.aop;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Timer {
+
+    Unit timeUnit() default Unit.NS;
+
+    enum Unit {
+       NS, MS
+    }
+
+}

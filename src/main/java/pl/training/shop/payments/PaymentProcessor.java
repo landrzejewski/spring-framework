@@ -4,7 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
+import pl.training.shop.commons.aop.Loggable;
+import pl.training.shop.commons.aop.Timer;
 import pl.training.shop.time.TimeProvider;
+
+import static pl.training.shop.commons.aop.Timer.Unit.MS;
 
 @Log
 @RequiredArgsConstructor
@@ -16,6 +20,8 @@ public class PaymentProcessor implements PaymentService {
     @Setter
     private TimeProvider timeProvider;
 
+    @Timer(timeUnit = MS)
+    // @Loggable
     @Override
     public Payment process(PaymentRequest paymentRequest) {
         var paymentValue = calculatePaymentValue(paymentRequest.getValue());
