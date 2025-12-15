@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
 import pl.training.shop.commons.aop.Loggable;
+import pl.training.shop.commons.aop.Retry;
 import pl.training.shop.commons.aop.Timer;
 import pl.training.shop.time.TimeProvider;
 
@@ -20,6 +21,7 @@ public class PaymentProcessor implements PaymentService {
     @Setter
     private TimeProvider timeProvider;
 
+    @Retry
     @Timer(timeUnit = MS)
     // @Loggable
     @Override
