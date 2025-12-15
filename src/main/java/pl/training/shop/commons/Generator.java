@@ -1,6 +1,8 @@
 package pl.training.shop.commons;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 
@@ -9,13 +11,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Qualifier
-@Target({ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER})
+@Target({ElementType.TYPE,ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
+@Qualifier
 @Component
+@Scope("prototype")
+@Lazy
 public @interface Generator {
 
-    @AliasFor(annotation = Component.class)
+    @AliasFor(
+            annotation = Component.class
+    )
     String value() default "";
 
 }
