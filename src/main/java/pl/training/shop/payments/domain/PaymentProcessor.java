@@ -1,4 +1,4 @@
-package pl.training.shop.payments;
+package pl.training.shop.payments.domain;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -7,9 +7,6 @@ import org.javamoney.moneta.Money;
 import org.springframework.transaction.annotation.Transactional;
 import pl.training.shop.commons.aop.*;
 import pl.training.shop.time.TimeProvider;
-
-import static pl.training.shop.commons.aop.Lock.LockType.WRITE;
-import static pl.training.shop.commons.aop.Timer.Unit.MS;
 
 @Transactional
 @Log
