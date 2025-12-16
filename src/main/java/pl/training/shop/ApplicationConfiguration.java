@@ -1,15 +1,26 @@
 package pl.training.shop;
 
+import com.zaxxer.hikari.HikariDataSource;
+import jakarta.persistence.EntityManagerFactory;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.*;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 import pl.training.shop.commons.aop.CacheAspect;
 import pl.training.shop.payments.PaymentCreatedEventListener;
 import pl.training.shop.payments.PaymentCreatedPublisher;
 import pl.training.shop.time.SystemTimeProvider;
 import pl.training.shop.time.TimeProvider;
+
+import javax.sql.DataSource;
+
+import java.util.Map;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -40,5 +51,32 @@ public class ApplicationConfiguration {
         pointcut.setExpression("execution(pl.training.shop.payments.Payment pl.training.shop.payments.PaymentProcessor.getById(String))");
         return new DefaultPointcutAdvisor(pointcut, cacheAspect);
     }*/
+
+    @Bean
+    public DataSource dataSource() {
+       var dataSource = new HikariDataSource();
+       dataSource.setUsername("admin");
+       dataSource.setPassword("admin");
+       dataSource.setJdbcUrl("jdbc:postrgesql://localhost:5432/payments");
+       dataSource.setDriverClassName("org.postgresql.Driver");
+       return dataSource;
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+        var factoryBean = new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setDataSource(dataSource);
+        factoryBean.setPackagesToScan("pl.training.shop");
+        factoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+        factoryBean.setJpaPropertyMap(Map.of(
+                "jakarta.persistence.schema-generation.database.action", "drop-and-create"
+        ));
+        return factoryBean;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        return  new JpaTransactionManager(entityManagerFactory);
+    }
 
 }
