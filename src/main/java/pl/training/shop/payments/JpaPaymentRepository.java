@@ -3,9 +3,12 @@ package pl.training.shop.payments;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Transactional(propagation = Propagation.MANDATORY)
 public class JpaPaymentRepository implements PaymentRepository {
 
     @Setter
