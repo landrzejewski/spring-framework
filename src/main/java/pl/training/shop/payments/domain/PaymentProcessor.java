@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.training.shop.commons.aop.*;
 import pl.training.shop.time.TimeProvider;
 
-@Transactional
+@Atomic
 @Log
 @RequiredArgsConstructor
 public class PaymentProcessor implements PaymentService {
