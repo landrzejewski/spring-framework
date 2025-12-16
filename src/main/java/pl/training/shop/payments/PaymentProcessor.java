@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
-import pl.training.shop.commons.aop.Loggable;
-import pl.training.shop.commons.aop.Retry;
-import pl.training.shop.commons.aop.Timer;
+import pl.training.shop.commons.aop.*;
 import pl.training.shop.time.TimeProvider;
 
+import static pl.training.shop.commons.aop.Lock.LockType.WRITE;
 import static pl.training.shop.commons.aop.Timer.Unit.MS;
 
 @Log
@@ -21,9 +20,10 @@ public class PaymentProcessor implements PaymentService {
     @Setter
     private TimeProvider timeProvider;
 
-    @Retry
-    @Timer(timeUnit = MS)
-    // @Loggable
+    // @Lock(type = WRITE)
+    // @Retry
+    // @Timer(timeUnit = MS)
+    @Loggable
     @Override
     public Payment process(PaymentRequest paymentRequest) {
         var paymentValue = calculatePaymentValue(paymentRequest.getValue());
@@ -43,6 +43,12 @@ public class PaymentProcessor implements PaymentService {
     private Money calculatePaymentValue(Money paymentValue) {
         var paymentFee = paymentFeeCalculator.calculateFee(paymentValue);
         return paymentValue.add(paymentFee);
+    }
+
+    @Override
+    public Payment getById(@MinLength(16) String id) {
+        return paymentsRepository.findById(id)
+                .orElseThrow(PaymentNotFoundException::new);
     }
 
     // Wymagania dla metod związanych z cyklem życia
