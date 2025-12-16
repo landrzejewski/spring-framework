@@ -36,8 +36,8 @@ public class PaymentsConfiguration {
     }
 
     @Bean
-    public PaymentRepository inMemoryPaymentRepository() {
-        return new InMemoryPaymentRepository();
+    public PaymentRepository paymentRepository() {
+        return new JpaPaymentRepository();
     }
 
     @Bean

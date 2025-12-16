@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
+import org.springframework.transaction.annotation.Transactional;
 import pl.training.shop.commons.aop.*;
 import pl.training.shop.time.TimeProvider;
 
 import static pl.training.shop.commons.aop.Lock.LockType.WRITE;
 import static pl.training.shop.commons.aop.Timer.Unit.MS;
 
+@Transactional
 @Log
 @RequiredArgsConstructor
 public class PaymentProcessor implements PaymentService {

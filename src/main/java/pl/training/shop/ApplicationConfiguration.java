@@ -12,6 +12,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import pl.training.shop.commons.aop.CacheAspect;
 import pl.training.shop.payments.PaymentCreatedEventListener;
 import pl.training.shop.payments.PaymentCreatedPublisher;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
+@EnableTransactionManagement
 @EnableAspectJAutoProxy
 @ComponentScan
 @Configuration
@@ -57,7 +59,7 @@ public class ApplicationConfiguration {
        var dataSource = new HikariDataSource();
        dataSource.setUsername("admin");
        dataSource.setPassword("admin");
-       dataSource.setJdbcUrl("jdbc:postrgesql://localhost:5432/payments");
+       dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/payments");
        dataSource.setDriverClassName("org.postgresql.Driver");
        return dataSource;
     }
