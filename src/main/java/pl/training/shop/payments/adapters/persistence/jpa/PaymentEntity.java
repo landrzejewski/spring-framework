@@ -1,5 +1,6 @@
 package pl.training.shop.payments.adapters.persistence.jpa;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.EqualsAndHashCode;
@@ -16,6 +17,7 @@ public class PaymentEntity {
 
     @Id
     private String id;
+    @Column(name = "amount")
     private double value;
     private String currencyCode;
     private Instant timestamp;
