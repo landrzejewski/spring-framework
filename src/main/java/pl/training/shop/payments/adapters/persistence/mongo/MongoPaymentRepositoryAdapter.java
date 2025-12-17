@@ -1,7 +1,6 @@
 package pl.training.shop.payments.adapters.persistence.mongo;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +9,6 @@ import pl.training.shop.payments.domain.PaymentRepository;
 
 import java.util.Optional;
 
-@Primary
 @Transactional(propagation = Propagation.MANDATORY)
 @Component
 @RequiredArgsConstructor
