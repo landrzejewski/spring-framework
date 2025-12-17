@@ -9,7 +9,7 @@ import pl.training.shop.time.TimeProvider;
 @Configuration
 public class PaymentsConfiguration {
 
-    @Bean(initMethod = "init", destroyMethod = "destroy")
+    @Bean
     public PaymentProcessor paymentProcessor(PaymentIdGenerator paymentIdGenerator,
                                              // @Qualifier("uuid") PaymentIdGenerator paymentIdGenerator,
                                              PaymentFeeCalculator paymentFeeCalculator,

@@ -10,10 +10,3 @@ spring:
     hibernate:
       ddl-auto: create-drop
     open-in-view: false
-  mongodb:
-    username: admin
-    password: admin
-    database: payments
-    authentication-database: admin
-    # host: localhost
-    # port: 27017

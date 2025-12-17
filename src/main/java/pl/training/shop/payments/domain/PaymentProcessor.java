@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.javamoney.moneta.Money;
-import org.springframework.transaction.annotation.Transactional;
-import pl.training.shop.commons.aop.*;
+import pl.training.shop.commons.aop.Atomic;
+import pl.training.shop.commons.aop.Loggable;
 import pl.training.shop.time.TimeProvider;
 
 @Atomic
 @Log
 @RequiredArgsConstructor
-public class PaymentProcessor implements PaymentService {
+public class PaymentProcessor {
 
     private final PaymentIdGenerator paymentIdGenerator;
     private final PaymentFeeCalculator paymentFeeCalculator;
@@ -23,7 +23,6 @@ public class PaymentProcessor implements PaymentService {
     // @Retry
     // @Timer(timeUnit = MS)
     @Loggable
-    @Override
     public Payment process(PaymentRequest paymentRequest) {
         var paymentValue = calculatePaymentValue(paymentRequest.getValue());
         var payment = createPayment(paymentValue);
@@ -42,27 +41,6 @@ public class PaymentProcessor implements PaymentService {
     private Money calculatePaymentValue(Money paymentValue) {
         var paymentFee = paymentFeeCalculator.calculateFee(paymentValue);
         return paymentValue.add(paymentFee);
-    }
-
-    @Override
-    public Payment getById(@MinLength(16) String id) {
-        return paymentsRepository.findById(id)
-                .orElseThrow(PaymentNotFoundException::new);
-    }
-
-    // Wymagania dla metod związanych z cyklem życia
-    // - brak argumentów
-    // - brak resultatu
-    // - brak wyjątków typu Exception
-
-    // Metoda do inicjalizaji - wołana po wstrzyknięciu wszystkich zależności
-    public void init() {
-        log.info("Initializing Payment processor");
-    }
-
-    // Metoda do sprzątania - wołana po przed zniszczeniem beana (zwolnieniem referencji), działa tylko dal scope SINGLETON i przy prawidłowym zatrzymaniu kontenera
-    public void destroy() {
-        log.info("Destroying Payment processor");
     }
 
 }
