@@ -9,6 +9,8 @@ import pl.training.shop.time.TimeProvider;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
+// @EnableMongoRepositories
+// @EnableJpaRepositories(repositoryImplementationPostfix = "Impl")
 // @Profile("dev")
 @Configuration
 public class ApplicationConfiguration {
