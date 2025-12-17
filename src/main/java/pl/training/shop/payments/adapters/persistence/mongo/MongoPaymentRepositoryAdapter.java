@@ -1,6 +1,7 @@
-package pl.training.shop.payments.adapters.persistence.jpa;
+package pl.training.shop.payments.adapters.persistence.mongo;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,19 +10,20 @@ import pl.training.shop.payments.domain.PaymentRepository;
 
 import java.util.Optional;
 
+@Primary
 @Transactional(propagation = Propagation.MANDATORY)
 @Component
 @RequiredArgsConstructor
-public class JpaPaymentRepositoryAdapter implements PaymentRepository {
+public class MongoPaymentRepositoryAdapter implements PaymentRepository {
 
-    private final JpaPaymentRepository repository;
-    private final JpaPaymentModelMapper mapper;
+    private final MongoPaymentRepository repository;
+    private final MongoPaymentModelMapper mapper;
 
     @Override
     public Payment save(Payment payment) {
-        var paymentEntity = mapper.toEntity(payment);
-        var persistedEntity = repository.save(paymentEntity);
-        return mapper.toDomain(persistedEntity);
+        var paymentDocument = mapper.toDocument(payment);
+        var persistedDocument = repository.save(paymentDocument);
+        return mapper.toDomain(persistedDocument);
     }
 
     @Override
