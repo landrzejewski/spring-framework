@@ -4,6 +4,7 @@ import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Component;
 import pl.training.shop.payments.domain.Payment;
 import pl.training.shop.payments.domain.PaymentRequest;
+import pl.training.shop.payments.domain.PaymentStatus;
 
 @Component
 public class RestPaymentModelMapper {
@@ -20,6 +21,10 @@ public class RestPaymentModelMapper {
         paymentDto.setValue(payment.getValue().toString());
         paymentDto.setTimestamp(payment.getTimestamp());
         return paymentDto;
+    }
+
+    public PaymentStatus toDomain(String status) {
+        return PaymentStatus.valueOf(status);
     }
 
 }

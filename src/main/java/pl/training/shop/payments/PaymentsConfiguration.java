@@ -21,6 +21,11 @@ public class PaymentsConfiguration {
     }
 
     @Bean
+    public PaymentSearch paymentSearch(PaymentRepository paymentRepository) {
+        return new PaymentSearch(paymentRepository);
+    }
+
+    @Bean
     public PaymentFeeCalculator paymentFeeCalculator() {
         return new PercentagePaymentFeeCalculator(0.01);
     }
