@@ -12,3 +12,8 @@ spring:
     open-in-view: false
   messages:
     basename: messages,exceptions
+#  security:
+#    user:
+#      name: jan
+#      password: 123
+#      roles: ADMIN
