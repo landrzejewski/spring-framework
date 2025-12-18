@@ -1,6 +1,5 @@
 package pl.training.shop.payments.adapters.rest;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
