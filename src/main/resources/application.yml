@@ -19,6 +19,6 @@ spring:
 #      roles: ADMIN
 logging:
   level:
-    org.springsecurity: DEBUG
+    org.springframework.security: DEBUG
 jwt:
   secret: secretsecret
