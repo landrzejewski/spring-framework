@@ -17,3 +17,6 @@ spring:
 #      name: jan
 #      password: 123
 #      roles: ADMIN
+logging:
+  level:
+    org.springsecurity: DEBUG
