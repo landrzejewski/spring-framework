@@ -20,3 +20,5 @@ spring:
 logging:
   level:
     org.springsecurity: DEBUG
+jwt:
+  secret: secretsecret

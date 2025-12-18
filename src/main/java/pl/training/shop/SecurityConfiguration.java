@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,9 +17,13 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
+import pl.training.shop.security.AuthenticationLoggingFilter;
 import pl.training.shop.security.CustomAuthorizationManager;
+import pl.training.shop.security.jwt.JwtAuthenticationFilter;
 
 import javax.sql.DataSource;
 
@@ -49,6 +54,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
     AuthorizationManager authorizationManager; // Interfejs/kontrakt dla procesu autoryzacji
         AuthoritiesAuthorizationManager authoritiesAuthorizationManager; // Jedna z implementacji AuthorizationManager (role)*/
 
+// @EnableWebSecurity(debug = true)
 @Configuration
 public class SecurityConfiguration {
 
@@ -95,8 +101,12 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfiguration corsConfiguration) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfiguration corsConfiguration,
+                                                   AuthenticationLoggingFilter loggingFilter,
+                                                   JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         return http
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(loggingFilter, ExceptionTranslationFilter.class)
                 .cors(config -> config.configurationSource(request -> corsConfiguration))
                 .csrf(config -> config.ignoringRequestMatchers("/api/**"))
                 .httpBasic(withDefaults())
