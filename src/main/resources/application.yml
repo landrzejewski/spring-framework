@@ -12,6 +12,11 @@ spring:
     open-in-view: false
   messages:
     basename: messages,exceptions
+  security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: http://localhost:8100/realms/training
 #  security:
 #    user:
 #      name: jan
@@ -20,5 +25,3 @@ spring:
 logging:
   level:
     org.springframework.security: DEBUG
-jwt:
-  secret: secretsecret
