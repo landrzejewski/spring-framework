@@ -16,7 +16,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
+import pl.training.shop.security.CustomAuthorizationManager;
 
 import javax.sql.DataSource;
 
@@ -98,13 +100,30 @@ public class SecurityConfiguration {
                 .cors(config -> config.configurationSource(request -> corsConfiguration))
                 .csrf(config -> config.ignoringRequestMatchers("/api/**"))
                 .httpBasic(withDefaults())
-                .formLogin(withDefaults())
+                .formLogin(config -> config
+                                .loginPage("/login.html")
+                                .defaultSuccessUrl("/index.html")
+                                // .usernameParameter("username")
+                                // .passwordParameter("password")
+                                // .successHandler(new CustomAuthenticationSuccessHandler())
+                                // .failureHandler(new CustomAuthenticationFailureHandler())
+                )
+                .logout(config -> config
+                        .logoutRequestMatcher(request -> requestMatcher().matcher("/logout.html").matches(request))
+                        .logoutSuccessUrl("/login.html")
+                        .invalidateHttpSession(true)
+                )
                 .authorizeHttpRequests(config -> config
                         .requestMatchers("/login.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/actuator/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().access(new CustomAuthorizationManager())
                 )
                 .build();
+    }
+
+    @Bean
+    public  PathPatternRequestMatcher.Builder requestMatcher() {
+        return PathPatternRequestMatcher.withDefaults();
     }
 
 }
