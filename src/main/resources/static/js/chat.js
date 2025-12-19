@@ -44,8 +44,15 @@ $(() => {
         client.subscribe('/main', onMessage);
         client.subscribe('/private-' + privateClientId, onMessage);
         client.subscribe('/user-list', onUserListUpdated);
+        client.subscribe('/time', onTimeUpdated);
         changeStatus();
     }
+
+    const onTimeUpdated = (socketMessage) => {
+        const message = JSON.parse(socketMessage.body);
+        const timestamp = new Date(message.timestamp).toLocaleTimeString();
+        time.text('Server time: ' + timestamp);
+    };
 
     const onUserListUpdated = (socketMessage) => {
         const users = JSON.parse(socketMessage.body);

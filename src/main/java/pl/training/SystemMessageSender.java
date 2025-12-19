@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,6 +22,9 @@ public class SystemMessageSender {
     @Value("${user-list-topic}")
     @Setter
     private String userListTopic;
+    @Value("${time-topic}")
+    @Setter
+    private String timeTopic;
 
     public void sendToAll(String text) {
         var message = ChatMessage.builder()
@@ -35,6 +39,11 @@ public class SystemMessageSender {
                 .filter(user -> user.status().isVisible())
                 .toList();
         messagingTemplate.convertAndSend(userListTopic, chatUsers);
+    }
+
+    @Scheduled(fixedRate = 1_000)
+    public void sendTimestamp() {
+        messagingTemplate.convertAndSend(timeTopic, new ServerTime());
     }
 
 }
