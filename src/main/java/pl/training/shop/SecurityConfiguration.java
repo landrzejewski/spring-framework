@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
+import pl.training.shop.security.GitHubGrantedAuthoritiesMapper;
 import pl.training.shop.security.KeycloakAuthoritiesConverter;
 import pl.training.shop.security.KeycloakGrantedAuthoritiesMapper;
 import pl.training.shop.security.KeycloakLogoutHandler;
@@ -57,8 +58,7 @@ public class SecurityConfiguration {
 
     // Client scopes -> Client scope details (roles) -> Mapper details -> Add to userinfo enabled (Keycloak Admin console)
     private void userInfoCustomizer(OAuth2LoginConfigurer<HttpSecurity>.UserInfoEndpointConfig userInfoEndpointConfig) {
-        userInfoEndpointConfig.userAuthoritiesMapper(new KeycloakGrantedAuthoritiesMapper());
+        userInfoEndpointConfig.userAuthoritiesMapper(new GitHubGrantedAuthoritiesMapper());
     }
-
 
 }

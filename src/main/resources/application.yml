@@ -19,6 +19,9 @@ spring:
             issuer-uri: http://localhost:8100/realms/training
         client:
           registration:
+            github:
+              client-id: Ov23liiFhjiNjU0BtQrk
+              client-secret: 44e9c6c3b3ea348d5c0fb5589070c50a6945e740
             keycloak:
               client-id: training-client
               scope:
