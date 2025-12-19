@@ -5,9 +5,11 @@ import lombok.extern.java.Log;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @Log
 @RequiredArgsConstructor
 public class Job implements ApplicationRunner {
@@ -26,7 +28,7 @@ public class Job implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         // var scheduleFuture = taskScheduler.scheduleAtFixedRate(this::run, Duration.ofMillis(5_000));
         // var scheduleFuture = taskScheduler.schedule(this::run, new CronTrigger("0 * * * * *"));
-        // scheduleFuture. cancel(false);
+        // scheduleFuture.cancel(false);
     }
 
 }

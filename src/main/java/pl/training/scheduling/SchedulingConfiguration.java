@@ -3,9 +3,10 @@ package pl.training.scheduling;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-// @EnableScheduling
+@EnableScheduling
 @Configuration
 public class SchedulingConfiguration {
 
