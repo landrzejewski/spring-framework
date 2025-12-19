@@ -8,17 +8,22 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.spring.cache.HazelcastCacheManager;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
+import org.springframework.cache.transaction.TransactionAwareCacheManagerProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 
-@EnableCaching
+//@EnableCaching
 @Configuration
 public class CacheConfiguration {
 
-   /* @Bean
+    @Bean
     public CacheManager cacheManager() {
         return new TransactionAwareCacheManagerProxy(new ConcurrentMapCacheManager("reports"));
-    }*/
+    }
 
     /*@Bean
     public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
@@ -29,7 +34,7 @@ public class CacheConfiguration {
                 .build();
     }*/
 
-   /* @Bean
+    /*@Bean
     public HazelcastInstance hazelcastInstanceClient() {
         var config = new ClientConfig();
         config.setClusterName("training");
@@ -37,6 +42,13 @@ public class CacheConfiguration {
                 .addAddress("localhost:5701");
         return HazelcastClient.newHazelcastClient(config);
     }*/
+
+
+    /*@Bean
+    public CacheManager cacheManager(HazelcastInstance hazelcastInstanceClient) {
+        return new HazelcastCacheManager(hazelcastInstanceClient);
+    }
+
 
 
     @Bean
@@ -49,11 +61,7 @@ public class CacheConfiguration {
                 .setEnabled(true)
                 .setMulticastPort(20_000);
         return Hazelcast.newHazelcastInstance(config);
-    }
+    }*/
 
-    @Bean
-    public CacheManager cacheManager(HazelcastInstance hazelcastInstanceClient) {
-        return new HazelcastCacheManager(hazelcastInstanceClient);
-    }
 
 }

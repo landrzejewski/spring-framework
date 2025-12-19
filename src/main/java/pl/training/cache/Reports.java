@@ -32,9 +32,9 @@ public class Reports implements ApplicationRunner {
 
         reportingService.insertReport("generateMonthlySalesReport[1, 2024]");
 
-        log.info("execution 1: " + reportingService.generateMonthlySalesReport(1, 2024));*/
+        log.info("execution 1: " + reportingService.generateMonthlySalesReport(1, 2024));
 
-        /*var cache = cacheManager.getCache("reports");
+        var cache = cacheManager.getCache("reports");
         cache.clear();
         cache.put("generateMonthlySalesReport[1, 2024]", 1.0);
         cache.get("generateMonthlySalesReport[2, 2024]", Double.class);*/
