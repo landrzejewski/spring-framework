@@ -6,7 +6,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-// @Component
+@Component
 @RequiredArgsConstructor
 public class KafkaMessageSender implements ApplicationRunner {
 
