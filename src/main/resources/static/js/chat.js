@@ -36,13 +36,28 @@ $(() => {
         }
         const socket = new WebSocket('/chat');
         client = Stomp.over(socket);
-        client.connect({}, onConnect);
+        client.connect({username: username.val(), clientId, privateClientId}, onConnect);
     };
 
     const onConnect = () => {
         updateView(true);
         client.subscribe('/main', onMessage);
+        client.subscribe('/private-' + privateClientId, onMessage);
+        client.subscribe('/user-list', onUserListUpdated);
+        changeStatus();
     }
+
+    const onUserListUpdated = (socketMessage) => {
+        const users = JSON.parse(socketMessage.body);
+        recipients.empty();
+        users
+            .filter(user => user.clientId !== clientId)
+            .forEach(user=> $(`<option value="${user.clientId}">${user.username} (${user.clientId}) ${user.status.isBusy ? '- busy' : ''}</option>`).appendTo(recipients));
+    };
+
+    const changeStatus = () => {
+        client.send('/ws/update-status', {}, JSON.stringify({}));
+    };
 
     const onMessage = (chatMessage) => {
         const message = JSON.parse(chatMessage.body);
