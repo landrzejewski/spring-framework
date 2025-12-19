@@ -71,7 +71,7 @@ $(() => {
         if(isBusyBtn.is(':checked')) {
             isBusy = true;
         }
-        client.send('/ws/update-status', {}, JSON.stringify({}));
+        client.send('/ws/user-status', {}, JSON.stringify({isVisible, isBusy}));
     };
 
     const onMessage = (chatMessage) => {

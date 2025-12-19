@@ -46,8 +46,10 @@ public class ChatController {
         messagingTemplate.convertAndSend(privateTopicPrefix + chatUser.privateClientId(), chatMessage);
     }
 
-    @MessageMapping("/update-status")
-    public void onUpdateStatus() {
+
+    @MessageMapping("/user-status")
+    public void onUserUpdate(UserStatus userStatus, @Header("simpSessionId") String sessionId) {
+        repository.updateStatus(sessionId, userStatus);
         sender.sendUserList();
     }
 
