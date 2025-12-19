@@ -63,6 +63,14 @@ $(() => {
     };
 
     const changeStatus = () => {
+        let isVisible = true;
+        if(isVisibleBtn.is(':checked')) {
+            isVisible = false;
+        }
+        let isBusy = false;
+        if(isBusyBtn.is(':checked')) {
+            isBusy = true;
+        }
         client.send('/ws/update-status', {}, JSON.stringify({}));
     };
 
@@ -94,7 +102,7 @@ $(() => {
     connectBtn.on('click', connect);
     disconnectBtn.on('click', disconnect);
     sendBtn.on('click', send);
-   /* isVisibleBtn.change(changeStatus);
-    isBusyBtn.change(changeStatus);*/
+    isVisibleBtn.change(changeStatus);
+    isBusyBtn.change(changeStatus);
 
 });
