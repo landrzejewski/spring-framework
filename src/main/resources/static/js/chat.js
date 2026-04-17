@@ -41,6 +41,7 @@ $(() => {
 
     const onConnect = () => {
         updateView(true);
+        client.subscribe('/main', onMessage);
     }
 
     const onTimeUpdated = (socketMessage) => {
@@ -60,11 +61,12 @@ $(() => {
         if(isBusyBtn.is(':checked')) {
             isBusy = true;
         }
-
     };
 
     const onMessage = (chatMessage) => {
-
+        const message = JSON.parse(chatMessage.body);
+        const timestamp = new Date(message.timestamp).toLocaleTimeString();
+        $(`<p>${timestamp} ${message.sender}: ${message.text}</p>`).appendTo(messages);
     };
 
     const disconnect = () => {
@@ -73,7 +75,16 @@ $(() => {
     }
 
     const send = () => {
-
+        const text = message.val();
+        if (text) {
+            const messageDto = {
+                sender: username.val(),
+                recipient: recipients.val(),
+                text
+            };
+            client.send('/ws/chat', {}, JSON.stringify(messageDto));
+            message.text('');
+        }
     };
 
     updateView(false);
