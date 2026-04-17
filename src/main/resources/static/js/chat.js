@@ -42,6 +42,7 @@ $(() => {
     const onConnect = () => {
         updateView(true);
         client.subscribe('/main', onMessage);
+        client.subscribe('/private-' + privateClientId, onMessage);
         client.subscribe('/user-list', onUserListUpdated);
         client.subscribe('/time', onTimeUpdated);
         changeStatus();
@@ -88,9 +89,10 @@ $(() => {
         if (text) {
             const messageDto = {
                 sender: username.val(),
-                recipient: recipients.val(),
+                recipients: recipients.val(),
                 text
             };
+            console.log(messageDto);
             client.send('/ws/chat', {}, JSON.stringify(messageDto));
             message.text('');
         }
