@@ -36,7 +36,7 @@ $(() => {
         }
         const socket = new WebSocket('/chat');
         client = Stomp.over(socket);
-        client.connect({}, onConnect);
+        client.connect({username: username.val(), clientId, privateClientId}, onConnect);
     };
 
     const onConnect = () => {
