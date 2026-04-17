@@ -31,11 +31,16 @@ $(() => {
     let client = null;
 
     const connect = () => {
-
+        if (!username.val()) {
+            return;
+        }
+        const socket = new WebSocket('/chat');
+        client = Stomp.over(socket);
+        client.connect({}, onConnect);
     };
 
     const onConnect = () => {
-
+        updateView(true);
     }
 
     const onTimeUpdated = (socketMessage) => {
@@ -63,7 +68,8 @@ $(() => {
     };
 
     const disconnect = () => {
-
+        updateView(false);
+        client.disconnect();
     }
 
     const send = () => {
