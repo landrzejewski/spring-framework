@@ -31,35 +31,19 @@ $(() => {
     let client = null;
 
     const connect = () => {
-        if (!username.val()) {
-            return;
-        }
-        const socket = new WebSocket('/chat');
-        client = Stomp.over(socket);
-        client.connect({username: username.val(), clientId, privateClientId}, onConnect);
+
     };
 
     const onConnect = () => {
-        updateView(true);
-        client.subscribe('/main', onMessage);
-        client.subscribe('/private-' + privateClientId, onMessage);
-        client.subscribe('/user-list', onUserListUpdated);
-        client.subscribe('/time', onTimeUpdated);
-        changeStatus();
+
     }
 
     const onTimeUpdated = (socketMessage) => {
-        const message = JSON.parse(socketMessage.body);
-        const timestamp = new Date(message.timestamp).toLocaleTimeString();
-        time.text('Server time: ' + timestamp);
+
     };
 
     const onUserListUpdated = (socketMessage) => {
-        const users = JSON.parse(socketMessage.body);
-        recipients.empty();
-        users
-            .filter(user => user.clientId !== clientId)
-            .forEach(user=> $(`<option value="${user.clientId}">${user.username} (${user.clientId}) ${user.status.isBusy ? '- busy' : ''}</option>`).appendTo(recipients));
+
     };
 
     const changeStatus = () => {
@@ -71,31 +55,19 @@ $(() => {
         if(isBusyBtn.is(':checked')) {
             isBusy = true;
         }
-        client.send('/ws/user-status', {}, JSON.stringify({isVisible, isBusy}));
+
     };
 
     const onMessage = (chatMessage) => {
-        const message = JSON.parse(chatMessage.body);
-        const timestamp = new Date(message.timestamp).toLocaleTimeString();
-        $(`<p>${timestamp} ${message.sender}: ${message.text}</p>`).appendTo(messages);
+
     };
 
     const disconnect = () => {
-        updateView(false);
-        client.disconnect();
+
     }
 
     const send = () => {
-        const text = message.val();
-        if (text) {
-            const messageDto = {
-                sender: username.val(),
-                recipients: recipients.val(),
-                text,
-            };
-            client.send('/ws/chat', {}, JSON.stringify(messageDto));
-            message.text('');
-        }
+
     };
 
     updateView(false);
