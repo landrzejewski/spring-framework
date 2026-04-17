@@ -33,6 +33,7 @@ public class WebSocketConnectListener {
         var user = new ChatUser(clientId, privateClientId, username, defaultStatus());
         repository.put(socketId, user);
         log.info("Socket with id: %s is connected (username: %s)".formatted(socketId, username));
+        sender.sendToAll("User %s is connected".formatted(user.username()));
     }
 
 
