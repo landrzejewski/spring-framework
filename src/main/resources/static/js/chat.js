@@ -42,14 +42,22 @@ $(() => {
     const onConnect = () => {
         updateView(true);
         client.subscribe('/main', onMessage);
+        client.subscribe('/user-list', onUserListUpdated);
+        client.subscribe('/time', onTimeUpdated);
+        changeStatus();
     }
 
     const onTimeUpdated = (socketMessage) => {
-
+        const message = JSON.parse(socketMessage.body);
+        const timestamp = new Date(message.timestamp).toLocaleTimeString();
+        time.text('Server time: ' + timestamp);
     };
 
     const onUserListUpdated = (socketMessage) => {
-
+        const users = JSON.parse(socketMessage.body);
+        recipients.empty();
+        users.filter(user => user.clientId !== clientId)
+            .forEach(user=> $(`<option value="${user.clientId}">${user.username} (${user.clientId}) ${user.status.isBusy ? '- busy' : ''}</option>`).appendTo(recipients));
     };
 
     const changeStatus = () => {
@@ -61,6 +69,7 @@ $(() => {
         if(isBusyBtn.is(':checked')) {
             isBusy = true;
         }
+        client.send('/ws/user-status', {}, JSON.stringify({isVisible, isBusy}));
     };
 
     const onMessage = (chatMessage) => {
