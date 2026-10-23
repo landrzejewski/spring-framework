@@ -3,6 +3,7 @@ package pl.training;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
@@ -16,6 +17,7 @@ public class WebSockerDisconnectListener {
     private final SystemMessageSender sender;
     private final InMemoryChatUserRepository repository;
 
+    @Async
     @EventListener
     public void onDisconnect(SessionDisconnectEvent event) {
         var socketId = getSocketId(event);
